@@ -1,6 +1,11 @@
 # Spark 編程指南繁體中文版
 =============================
 
+## 貢獻方式
+請有意願加入的同好參考（https://github.com/TaiwanSparkUserGroup/spark-programming-guide-zh-tw/blob/master/CONTRIBUTING.rst）
+
+## 大綱
+
 * [簡介](README.md)
 * [快速上手](quick-start/README.md)
   * [Spark Shell](quick-start/using-spark-shell.md)
@@ -69,8 +74,9 @@
 ## Copyright
 
 本文翻譯自
-1.[Spark 官方手冊](https://spark.apache.org/docs/latest/)
-2.[Spark 编程指南简体中文版](https://github.com/aiyanbo/spark-programming-guide-zh-cn)
+
+1. [Spark 官方手冊](https://spark.apache.org/docs/latest/)
+2. [Spark 编程指南简体中文版](https://github.com/aiyanbo/spark-programming-guide-zh-cn)
 
 ## License
 
