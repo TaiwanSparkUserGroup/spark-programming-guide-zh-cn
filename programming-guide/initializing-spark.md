@@ -1,26 +1,27 @@
 # 初始化 Spark
 
-Spark 编程的第一步是需要创建一个 [SparkContext](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.SparkContext) 对象，用来告诉 Spark 如何访问集群。在创建 `SparkContext` 之前，你需要构建一个 [SparkConf](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.SparkConf) 对象， SparkConf 对象包含了一些你应用程序的信息。
+使用 Spark 的第一步是創建[SparkContext](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.SparkContext) 物件，讓 Spark 知道如何找到集群。而建立 `SparkContext` 之前，還需建立 [SparkConf](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.SparkConf) 物件，而這個物件則包含你的應用程式資訊。
 
 ```scala
 val conf = new SparkConf().setAppName(appName).setMaster(master)
 new SparkContext(conf)
 ```
 
-`appName` 参数是你程序的名字，它会显示在 cluster UI 上。`master` 是 [Spark, Mesos 或 YARN 集群的 URL](https://spark.apache.org/docs/latest/submitting-applications.html#master-urls)，或运行在本地模式时，使用专用字符串 “local”。在实践中，当应用程序运行在一个集群上时，你并不想要把 `master` 硬编码到你的程序中，你可以[用 spark-submit 启动你的应用程序](https://spark.apache.org/docs/latest/submitting-applications.html)的时候传递它。然而，你可以在本地测试和单元测试中使用 “local” 运行 Spark 进程。
+`appName`參數是你自定的程式名稱，會顯示在 cluster UI 上。`master` 是[Spark, Mesos 或 YARN 集群的 URL](https://spark.apache.org/docs/latest/submitting-applications.html#master-urls)，或是運行本地模式(standalone) 時可使用 “local”。實際上，當你的程式在集群上運作時，你不需要把 `master` 放在程式中，因此可以[用 spark-submit 啟動你的應用程式](https://spark.apache.org/docs/latest/submitting-applications.html)。當然，你也可以在 Spark 程式中使用 “local” 做本地測試或是單元測試。
+
 
 ## 使用 Shell
 
-在 Spark shell 中，有一个专有的 SparkContext 已经为你创建好。在变量中叫做 `sc`。你自己创建的 SparkContext 将无法工作。可以用 `--master` 参数来设置 SparkContext 要连接的集群，用 `--jars` 来设置需要添加到 classpath 中的 JAR 包，如果有多个 JAR 包使用**逗号**分割符连接它们。例如：在一个拥有 4 核的环境上运行 `bin/spark-shell`，使用：
+在 Spark shell 裡，有一個內建的 SparkContext，名為 `sc`。你可以用 `--master` 設定 SparkContext 欲連結的集群，用 `--jars`來指定需要加到 classpath 中的 JAR 包，倘若有多個 JAR，可使用**逗號**分隔符號來連結他們。例如：想在一個擁有 4 個CPU 的環境上執行 `bin/spark-shell`：
 
 ```
 $ ./bin/spark-shell --master local[4]
 ```
 
-或在 classpath 中添加 `code.jar`，使用：
+或是想在 classpath 中增加 `code.jar`，你可以這樣寫：
 
 ```
 $ ./bin/spark-shell --master local[4] --jars code.jar
 ```
 
-执行 `spark-shell --help` 获取完整的选项列表。在这之后，调用 `spark-shell` 会比 [spark-submit 脚本](https://spark.apache.org/docs/latest/submitting-applications.html)更为普遍。
+此外，你可以執行 `spark-shell --help` 得到完整的參數列表。目前，使用 `spark-submit` 會比 [spark-shell ](https://spark.apache.org/docs/latest/submitting-applications.html)普遍。
