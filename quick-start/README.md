@@ -6,5 +6,5 @@
 
 
 * [Spark Shell](using-spark-shell.md)
-* [獨立應用程序](standalone-applications.md)
+* [獨立應用程序](self-contained-applications.md)
 * [開始翻滾吧](where-to-go-from-here.md)
