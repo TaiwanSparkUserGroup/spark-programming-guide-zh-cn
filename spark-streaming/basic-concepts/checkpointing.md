@@ -1,34 +1,34 @@
 # Checkpointing
 
-一个流应用程序必须全天候运行，所有必须能够解决应用程序逻辑无关的故障（如系统错误，JVM崩溃等）。为了使这成为可能，Spark Streaming需要checkpoint足够的信息到容错存储系统中，
-以使系统从故障中恢复。
+一個串流應用程式必須全天候運行，所有必須能夠解决應用程式邏輯無關的故障（如系统錯誤，JVM崩溃等）。為了使這成為可能，Spark Streaming需要checkpoint足夠的訊息到容錯儲存系统中，
+以使系统從故障中恢復。
 
-- Metadata checkpointing：保存流计算的定义信息到容错存储系统如HDFS中。这用来恢复应用程序中运行worker的节点的故障。元数据包括
-    - Configuration ：创建Spark Streaming应用程序的配置信息
-    - DStream operations ：定义Streaming应用程序的操作集合
-    - Incomplete batches：操作存在队列中的未完成的批
-- Data checkpointing ：保存生成的RDD到可靠的存储系统中，这在有状态transformation（如结合跨多个批次的数据）中是必须的。在这样一个transformation中，生成的RDD依赖于之前
-批的RDD，随着时间的推移，这个依赖链的长度会持续增长。在恢复的过程中，为了避免这种无限增长。有状态的transformation的中间RDD将会定时地存储到可靠存储系统中，以截断这个依赖链。
+- Metadata checkpointing：保存流計算的定義訊息到容錯儲存系统如HDFS中。這用來恢復應用程式中運行worker的節點的故障。元資料包括
+    - Configuration ：創建Spark Streaming應用程式的配置訊息
+    - DStream operations ：定義Streaming應用程式的操作集合
+    - Incomplete batches：操作存在隊列中的未完成的批次
+- Data checkpointing ：保存生成的RDD到可靠的儲存系统中，這在有狀態transformation（如结合跨多個批次的資料）中是必須的。在這樣一個transformation中，生成的RDDDependencies於之前
+批的RDD，隨着時間的推移，這個依賴鏈的長度會持續增長。在恢復的過程中，為了避免這種無限增長。有狀態的transformation的中間RDD將會定時地儲存到可靠儲存系统中，以截斷這個依賴鏈。
 
-元数据checkpoint主要是为了从driver故障中恢复数据。如果transformation操作被用到了，数据checkpoint即使在简单的操作中都是必须的。
+元資料checkpoint主要是為了從driver故障中恢復資料。如果transformation操作被用到了，資料checkpoint即使在簡單的操作中都是必須的。
 
-## 何时checkpoint
+## 何時checkpoint
 
-应用程序在下面两种情况下必须开启checkpoint
+應用程式在下面兩種情況下必須開啟checkpoint
 
-- 使用有状态的transformation。如果在应用程序中用到了`updateStateByKey`或者`reduceByKeyAndWindow`，checkpoint目录必需提供用以定期checkpoint RDD。
-- 从运行应用程序的driver的故障中恢复过来。使用元数据checkpoint恢复处理信息。
+- 使用有狀態的transformation。如果在應用程式中用到了`updateStateByKey`或者`reduceByKeyAndWindow`，checkpoint目錄必需提供用以定期checkpoint RDD。
+- 從運行應用程式的driver的故障中恢復過來。使用元資料checkpoint恢復處理訊息。
 
-注意，没有前述的有状态的transformation的简单流应用程序在运行时可以不开启checkpoint。在这种情况下，从driver故障的恢复将是部分恢复（接收到了但是还没有处理的数据将会丢失）。
-这通常是可以接受的，许多运行的Spark Streaming应用程序都是这种方式。
+注意，没有前述的有狀態的transformation的簡單串流應用程式在運行時可以不開啟checkpoint。在這種情況下，從driver故障的恢復將是部分恢復（接收到了但是還没有處理的資料將會丢失）。
+這通常是可以接受的，許多運行的Spark Streaming應用程式都是這種方式。
 
-## 怎样配置Checkpointing
+## 怎樣配置Checkpointing
 
-在容错、可靠的文件系统（HDFS、s3等）中设置一个目录用于保存checkpoint信息。着可以通过`streamingContext.checkpoint(checkpointDirectory)`方法来做。这运行你用之前介绍的
-有状态transformation。另外，如果你想从driver故障中恢复，你应该以下面的方式重写你的Streaming应用程序。
+在容錯、可靠的檔案系統（HDFS、s3等）中設定一個目錄用於保存checkpoint訊息。可以藉由`streamingContext.checkpoint(checkpointDirectory)`函數來做。這運行之前介紹的
+有狀態transformation。另外，如果你想從driver故障中恢復，你應該以下面的方式重寫你的Streaming應用程式。
 
-- 当应用程序是第一次启动，新建一个StreamingContext，启动所有Stream，然后调用`start()`方法
-- 当应用程序因为故障重新启动，它将会从checkpoint目录checkpoint数据重新创建StreamingContext
+- 當應用程式是第一次啟動，新建一個StreamingContext，啟動所有Stream，然後調用`start()`函數
+- 當應用程式因為故障重新啟動，它將會從checkpoint目錄checkpoint資料重新創建StreamingContext
 
 ```scala
 // Function to create and setup a new StreamingContext
@@ -52,13 +52,13 @@ context.start()
 context.awaitTermination()
 ```
 
-如果`checkpointDirectory`存在，上下文将会利用checkpoint数据重新创建。如果这个目录不存在，将会调用`functionToCreateContext`函数创建一个新的上下文，建立DStreams。
-请看[RecoverableNetworkWordCount](https://github.com/apache/spark/tree/master/examples/src/main/scala/org/apache/spark/examples/streaming/RecoverableNetworkWordCount.scala)例子。
+如果`checkpointDirectory`存在，StreamingContext將會利用checkpoint資料重新創建。如果這個目錄不存在，將會調用`functionToCreateContext`函數創建一個新的StreamingContext，建立DStreams。
+請看[RecoverableNetworkWordCount](https://github.com/apache/spark/tree/master/examples/src/main/scala/org/apache/spark/examples/streaming/RecoverableNetworkWordCount.scala)例子。
 
-除了使用`getOrCreate`，开发者必须保证在故障发生时，driver处理自动重启。只能通过部署运行应用程序的基础设施来达到该目的。在部署章节将有更进一步的讨论。
+除了使用`getOrCreate`，開發者必須保證在故障發生時，driver處理自動重啟。只能藉由部署運行應用程式的基礎設施來達到該目的。在部署章節將有更進一步的討論。
 
-注意，RDD的checkpointing有存储成本。这会导致批数据（包含的RDD被checkpoint）的处理时间增加。因此，需要小心的设置批处理的时间间隔。在最小的批容量(包含1秒的数据)情况下，checkpoint每批数据会显著的减少
-操作的吞吐量。相反，checkpointing太少会导致谱系以及任务大小增大，这会产生有害的影响。因为有状态的transformation需要RDD checkpoint。默认的间隔时间是批间隔时间的倍数，最少10秒。它可以通过`dstream.checkpoint`
-来设置。典型的情况下，设置checkpoint间隔是DStream的滑动间隔的5-10大小是一个好的尝试。
+注意，RDD的checkpointing有儲存成本。這會導致批次資料（包含的RDD被checkpoint）的處理時間增加。因此，需要小心的設定批次處理的時間間隔。在最小的批次大小(包含1秒的資料)情況下，checkpoint每批次資料會顯著的減少
+操作的吞吐量。相反，checkpointing太少會導致lineage以及任務大小增大，這會產生有害的影響。因為有狀態的transformation需要RDD checkpoint。預設的間隔時間是批次間隔時間的倍數，最少10秒。它可以藉由`dstream.checkpoint`
+來設定。典型的情況下，設定checkpoint間隔是DStream的滑動間隔的5-10大小是一個好的嘗試。
 
 

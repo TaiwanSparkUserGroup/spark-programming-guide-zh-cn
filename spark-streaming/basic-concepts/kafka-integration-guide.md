@@ -1,9 +1,9 @@
-# kafka集成指南
+# kafka整合指南
 
-[Apache kafka](http://kafka.apache.org/)是一个分布式的发布-订阅消息系统，它可以分布式的、可分区的、可重复提交的方式读写日志数据。下面我们将具体介绍Spark Streaming怎样从kafka中
-接收数据。
+[Apache kafka](http://kafka.apache.org/)是一個分散式的發布-订阅訊息系统，它可以分散式的、可分區的、可重複提交的方式讀寫日誌資料。下面我們將具體介紹Spark Streaming怎樣從kafka中
+接收資料。
 
-- 关联：在你的SBT或者Maven项目定义中，引用下面的组件到流应用程序中。
+- 連接：在你的SBT或者Maven項目定義中，引用下面的组件到串流應用程式中。
 
 ```
  groupId = org.apache.spark
@@ -11,7 +11,7 @@
  version = 1.1.1
 ```
 
-- 编程：在应用程序代码中，引入`FlumeUtils`创建输入DStream。
+- 編程：在應用程式程式碼中，引入`FlumeUtils`創建輸入DStream。
 
 ```scala
  import org.apache.spark.streaming.kafka._
@@ -19,11 +19,11 @@
  	streamingContext, [zookeeperQuorum], [group id of the consumer], [per-topic number of Kafka partitions to consume])
 ```
 
-有两点需要注意的地方：
+有兩點需要注意的地方：
 
-   1. kafka的topic分区(partition)和由Spark Streaming生成的RDD分区不相关。所以在`KafkaUtils.createStream()`方法中，增加特定topic的分区数只能够增加单个`receiver`消费这个
-    topic的线程数，不能增加Spark处理数据的并发数。
+   1. kafka的topic分區(partition)和由Spark Streaming生成的RDD分區不相關。所以在`KafkaUtils.createStream()`函數中，增加特定topic的分區數只能夠增加單個`receiver`消費這個
+    topic的執行緒數，不能增加Spark處理資料的並發數。
 
-   2. 通过不同的group和topic，可以创建多个输入DStream，从而利用多个`receiver`并发的接收数据。
+   2. 藉由不同的group和topic，可以創建多個輸入DStream，從而利用多個`receiver`並發的接收資料。
 
-- 部署：将`spark-streaming-kafka_2.10`和它的依赖（除了`spark-core_2.10`和`spark-streaming_2.10`）打包到应用程序的jar包中。然后用`spark-submit`方法启动你的应用程序。
+- 部署：將`spark-streaming-kafka_2.10`和它的Dependencies（除了`spark-core_2.10`和`spark-streaming_2.10`）打包到應用程式的jar包中。然後用`spark-submit`函數啟動你的應用程式。

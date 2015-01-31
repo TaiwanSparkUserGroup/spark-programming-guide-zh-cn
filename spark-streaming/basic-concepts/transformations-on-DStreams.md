@@ -1,34 +1,34 @@
-# DStream中的转换（transformation）
+# DStream中的轉換（transformation）
 
-和RDD类似，transformation允许从输入DStream来的数据被修改。DStreams支持很多在RDD中可用的transformation算子。一些常用的算子如下所示：
+和RDD類似，transformation允許從輸入DStream來的資料被修改。DStreams支持很多在RDD中可用的transformation操作。一些常用的操作如下所示：
 
 Transformation | Meaning
 --- | ---
-map(func) | 利用函数`func`处理原DStream的每个元素，返回一个新的DStream
-flatMap(func) | 与map相似，但是每个输入项可用被映射为0个或者多个输出项
-filter(func) | 返回一个新的DStream，它仅仅包含源DStream中满足函数func的项
-repartition(numPartitions) | 通过创建更多或者更少的partition改变这个DStream的并行级别(level of parallelism)
-union(otherStream) | 返回一个新的DStream,它包含源DStream和otherStream的联合元素
-count() | 通过计算源DStream中每个RDD的元素数量，返回一个包含单元素(single-element)RDDs的新DStream
-reduce(func) | 利用函数func聚集源DStream中每个RDD的元素，返回一个包含单元素(single-element)RDDs的新DStream。函数应该是相关联的，以使计算可以并行化
-countByValue() | 这个算子应用于元素类型为K的DStream上，返回一个（K,long）对的新DStream，每个键的值是在原DStream的每个RDD中的频率。
-reduceByKey(func, [numTasks]) | 当在一个由(K,V)对组成的DStream上调用这个算子，返回一个新的由(K,V)对组成的DStream，每一个key的值均由给定的reduce函数聚集起来。注意：在默认情况下，这个算子利用了Spark默认的并发任务数去分组。你可以用`numTasks`参数设置不同的任务数
-join(otherStream, [numTasks]) | 当应用于两个DStream（一个包含（K,V）对,一个包含(K,W)对），返回一个包含(K, (V, W))对的新DStream
-cogroup(otherStream, [numTasks]) | 当应用于两个DStream（一个包含（K,V）对,一个包含(K,W)对），返回一个包含(K, Seq[V], Seq[W])的元组
-transform(func) | 通过对源DStream的每个RDD应用RDD-to-RDD函数，创建一个新的DStream。这个可以在DStream中的任何RDD操作中使用
-updateStateByKey(func) | 利用给定的函数更新DStream的状态，返回一个新"state"的DStream。
+map(func) | 利用函數`func`處理原DStream的每個元素，返回一個新的DStream
+flatMap(func) | 與map相似，但是每個輸入項可用被映射為0個或者多個輸出項
+filter(func) | 返回一個新的DStream，它僅僅包含來源DStream中滿足函數func的項
+repartition(numPartitions) | 藉由創建更多或者更少的partition改變這個DStream的並行級别(level of parallelism)
+union(otherStream) | 返回一個新的DStream,它包含來源DStream和otherStream的联合元素
+count() | 藉由計算來源DStream中每個RDD的元素數量，返回一個包含單元素(single-element)RDDs的新DStream
+reduce(func) | 利用函數func聚集來源DStream中每個RDD的元素，返回一個包含單元素(single-element)RDDs的新DStream。函數應該是相連接的，以使計算可以並行化
+countByValue() | 這個操作應用於元素類型為K的DStream上，返回一個（K,long）對的新DStream，每個键的值是在原DStream的每個RDD中的频率。
+reduceByKey(func, [numTasks]) | 當在一個由(K,V)對組成的DStream上調用這個操作，返回一個新的由(K,V)對組成的DStream，每一個key的值均由给定的reduce函數聚集起來。注意：在預設情況下，這個操作利用了Spark預設的並發任務數去分组。你可以用`numTasks`參數設定不同的任務數
+join(otherStream, [numTasks]) | 當應用於兩個DStream（一個包含（K,V）對,一個包含(K,W)對），返回一個包含(K, (V, W))對的新DStream
+cogroup(otherStream, [numTasks]) | 當應用於兩個DStream（一個包含（K,V）對,一個包含(K,W)對），返回一個包含(K, Seq[V], Seq[W])的元组
+transform(func) | 藉由對來源DStream的每個RDD應用RDD-to-RDD函數，創建一個新的DStream。這個可以在DStream中的任何RDD操作中使用
+updateStateByKey(func) | 利用给定的函數更新DStream的狀態，返回一個新"state"的DStream。
 
-最后两个transformation算子需要重点介绍一下：
+最後兩個transformation操作需要重點介紹一下：
 
 ## UpdateStateByKey操作
 
 
-updateStateByKey操作允许不断用新信息更新它的同时保持任意状态。你需要通过两步来使用它
+updateStateByKey操作允許不斷用新訊息更新它的同時保持任意狀態。你需要藉由兩步來使用它
 
-- 定义状态-状态可以是任何的数据类型
-- 定义状态更新函数-怎样利用更新前的状态和从输入流里面获取的新值更新状态
+- 定義狀態-狀態可以是任何的資料類型
+- 定義狀態更新函數-怎樣利用更新前的狀態和從輸入串流裡面獲取的新值更新狀態
 
-让我们举个例子说明。在例子中，你想保持一个文本数据流中每个单词的运行次数，运行次数用一个state表示，它的类型是整数
+讓我們舉個例子說明。在例子中，你想保持一個文本資料串流中每個單字的運行次數，運行次數用一個state表示，它的類型是整數
 
 ```scala
 def updateFunction(newValues: Seq[Int], runningCount: Option[Int]): Option[Int] = {
@@ -37,7 +37,7 @@ def updateFunction(newValues: Seq[Int], runningCount: Option[Int]): Option[Int] 
 }
 ```
 
-这个函数被用到了DStream包含的单词上
+這個函數被用到了DStream包含的單字上
 
 ```scala
 import org.apache.spark._
@@ -55,13 +55,13 @@ val pairs = words.map(word => (word, 1))
 val runningCounts = pairs.updateStateByKey[Int](updateFunction _)
 ```
 
-更新函数将会被每个单词调用，`newValues`拥有一系列的1（从 (词, 1)对而来），runningCount拥有之前的次数。要看完整的代码，见[例子](https://github.com/apache/spark/blob/master/examples/src/main/scala/org/apache/spark/examples/streaming/StatefulNetworkWordCount.scala)
+更新函數將會被每個單字調用，`newValues`擁有一系列的1（從 (词, 1)對而來），runningCount擁有之前的次數。要看完整的程式碼，見[例子](https://github.com/apache/spark/blob/master/examples/src/main/scala/org/apache/spark/examples/streaming/StatefulNetworkWordCount.scala)
 
 ## Transform操作
 
-`transform`操作（以及它的变化形式如`transformWith`）允许在DStream运行任何RDD-to-RDD函数。它能够被用来应用任何没在DStream API中提供的RDD操作（It can be used to apply any RDD operation that is not exposed in the DStream API）。
-例如，连接数据流中的每个批（batch）和另外一个数据集的功能并没有在DStream API中提供，然而你可以简单的利用`transform`方法做到。如果你想通过连接带有预先计算的垃圾邮件信息的输入数据流
-来清理实时数据，然后过了它们，你可以按如下方法来做：
+`transform`操作（以及它的變化形式如`transformWith`）允許在DStream運行任何RDD-to-RDD函數。它能夠被用來應用任何没在DStream API中提供的RDD操作（It can be used to apply any RDD operation that is not exposed in the DStream API）。
+例如，連接資料串流中的每個批（batch）和另外一個資料集的功能並没有在DStream API中提供，然而你可以簡單的利用`transform`函數做到。如果你想藉由連接带有預先計算的垃圾邮件訊息的輸入資料串流
+來清理即時資料，然後過了它們，你可以按如下函數來做：
 
 ```scala
 val spamInfoRDD = ssc.sparkContext.newAPIHadoopRDD(...) // RDD containing spam information
@@ -72,37 +72,37 @@ val cleanedDStream = wordCounts.transform(rdd => {
 })
 ```
 
-事实上，你也可以在`transform`方法中用[机器学习](https://spark.apache.org/docs/latest/mllib-guide.html)和[图计算](https://spark.apache.org/docs/latest/graphx-programming-guide.html)算法
+事實上，你也可以在`transform`函數中用[機器学习](https://spark.apache.org/docs/latest/mllib-guide.html)和[圖計算](https://spark.apache.org/docs/latest/graphx-programming-guide.html)算法
 
 ## 窗口(window)操作
 
-Spark Streaming也支持窗口计算，它允许你在一个滑动窗口数据上应用transformation算子。下图阐明了这个滑动窗口。
+Spark Streaming也支持窗口計算，它允許你在一個滑動窗口資料上應用transformation操作。下圖阐明了這個滑動窗口。
 
-![滑动窗口](../../img/streaming-dstream-window.png)
+![滑動窗口](../../img/streaming-dstream-window.png)
 
-如上图显示，窗口在源DStream上滑动，合并和操作落入窗内的源RDDs，产生窗口化的DStream的RDDs。在这个具体的例子中，程序在三个时间单元的数据上进行窗口操作，并且每两个时间单元滑动一次。
-这说明，任何一个窗口操作都需要指定两个参数：
+如上圖顯示，窗口在來源DStream上滑動，合並和操作落入窗内的來源RDDs，產生窗口化的DStream的RDDs。在這個具體的例子中，程式在三個時間單元的資料上進行窗口操作，並且每兩個時間單元滑動一次。
+這說明，任何一個窗口操作都需要指定兩個參數：
 
-- 窗口长度：窗口的持续时间
-- 滑动的时间间隔：窗口操作执行的时间间隔
+- 窗口長度：窗口的持續時間
+- 滑動的時間間隔：窗口操作執行的時間間隔
 
-这两个参数必须是源DStream的批时间间隔的倍数。
+這兩個參數必須是來源DStream的批時間間隔的倍數。
 
-下面举例说明窗口操作。例如，你想扩展前面的[例子](../a-quick-example.md)用来计算过去30秒的词频，间隔时间是10秒。为了达到这个目的，我们必须在过去30秒的`pairs` DStream上应用`reduceByKey`
-操作。用方法`reduceByKeyAndWindow`实现。
+下面舉例說明窗口操作。例如，你想擴充前面的[例子](../a-quick-example.md)用來計算過去30秒的词频，間隔時間是10秒。為了達到這個目的，我們必須在過去30秒的`pairs` DStream上應用`reduceByKey`
+操作。用函數`reduceByKeyAndWindow`實作。
 
 ```scala
 // Reduce last 30 seconds of data, every 10 seconds
 val windowedWordCounts = pairs.reduceByKeyAndWindow((a:Int,b:Int) => (a + b), Seconds(30), Seconds(10))
 ```
 
-一些常用的窗口操作如下所示，这些操作都需要用到上文提到的两个参数：窗口长度和滑动的时间间隔
+一些常用的窗口操作如下所示，這些操作都需要用到上文提到的兩個參數：窗口長度和滑動的時間間隔
 
 Transformation | Meaning
 --- | ---
-window(windowLength, slideInterval) | 基于源DStream产生的窗口化的批数据计算一个新的DStream
-countByWindow(windowLength, slideInterval) | 返回流中元素的一个滑动窗口数
-reduceByWindow(func, windowLength, slideInterval) | 返回一个单元素流。利用函数func聚集滑动时间间隔的流的元素创建这个单元素流。函数必须是相关联的以使计算能够正确的并行计算。
-reduceByKeyAndWindow(func, windowLength, slideInterval, [numTasks]) | 应用到一个(K,V)对组成的DStream上，返回一个由(K,V)对组成的新的DStream。每一个key的值均由给定的reduce函数聚集起来。注意：在默认情况下，这个算子利用了Spark默认的并发任务数去分组。你可以用`numTasks`参数设置不同的任务数
+window(windowLength, slideInterval) | 基於來源DStream產生的窗口化的批次資料計算一個新的DStream
+countByWindow(windowLength, slideInterval) | 返回流中元素的一個滑動窗口數
+reduceByWindow(func, windowLength, slideInterval) | 返回一個單元素流。利用函數func聚集滑動時間間隔的流的元素創建這個單元素流。函數必須是相連接的以使計算能夠正確的並行計算。
+reduceByKeyAndWindow(func, windowLength, slideInterval, [numTasks]) | 應用到一個(K,V)對組成的DStream上，返回一個由(K,V)對組成的新的DStream。每一個key的值均由给定的reduce函數聚集起來。注意：在預設情況下，這個操作利用了Spark預設的並發任務數去分组。你可以用`numTasks`參數設定不同的任務數
 reduceByKeyAndWindow(func, invFunc, windowLength, slideInterval, [numTasks]) | A more efficient version of the above reduceByKeyAndWindow() where the reduce value of each window is calculated incrementally using the reduce values of the previous window. This is done by reducing the new data that enter the sliding window, and "inverse reducing" the old data that leave the window. An example would be that of "adding" and "subtracting" counts of keys as the window slides. However, it is applicable to only "invertible reduce functions", that is, those reduce functions which have a corresponding "inverse reduce" function (taken as parameter invFunc. Like in reduceByKeyAndWindow, the number of reduce tasks is configurable through an optional argument.
-countByValueAndWindow(windowLength, slideInterval, [numTasks]) | 应用到一个(K,V)对组成的DStream上，返回一个由(K,V)对组成的新的DStream。每个key的值都是它们在滑动窗口中出现的频率。
+countByValueAndWindow(windowLength, slideInterval, [numTasks]) | 應用到一個(K,V)對組成的DStream上，返回一個由(K,V)對組成的新的DStream。每個key的值都是它們在滑動窗口中出現的频率。

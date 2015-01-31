@@ -1,9 +1,9 @@
-# 一个快速的例子
+# 一個快速的例子
 
-在我们进入如何编写Spark Streaming程序的细节之前，让我们快速地浏览一个简单的例子。在这个例子中，程序从监听TCP套接字的数据服务器获取文本数据，然后计算文本中包含的单词数。做法如下：
+在我們進入如何編寫Spark Streaming程式的細節之前，讓我們快速地瀏覽一個簡單的例子。在這個例子中，程式從監聽TCP Socket的資料伺服器取得文字資料，然後計算文字中包含的單字數。做法如下：
 
-首先，我们导入Spark Streaming的相关类以及一些从StreamingContext获得的隐式转换到我们的环境中，为我们所需的其他类（如DStream）提供有用的方法。[StreamingContext](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.streaming.StreamingContext)
-是Spark所有流操作的主要入口。然后，我们创建了一个具有两个执行线程以及1秒批间隔时间(即以秒为单位分割数据流)的本地StreamingContext。
+首先，我們導入Spark Streaming的相關類別以及一些從StreamingContext獲得的隱式轉換到我們的環境中，為我們所需的其他類別（如DStream）提供有用的函數。[StreamingContext](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.streaming.StreamingContext)
+是Spark所有串流操作的主要入口。然後，我們創建了一個具有兩個執行執行緒以及1秒批次間隔時間(即以秒為單位分割資料串流)的本地StreamingContext。
 
 ```scala
 import org.apache.spark._
@@ -13,20 +13,20 @@ import org.apache.spark.streaming.StreamingContext._
 val conf = new SparkConf().setMaster("local[2]").setAppName("NetworkWordCount")
 val ssc = new StreamingContext(conf, Seconds(1))
 ```
-利用这个上下文，我们能够创建一个DStream，它表示从TCP源（主机位localhost，端口为9999）获取的流式数据。
+利用這個StreamingContext，我們能夠創建一個DStream，它表示從TCP來源（主機位址localhost，port為9999）取得的資料串流。
 
 ```scala
 // Create a DStream that will connect to hostname:port, like localhost:9999
 val lines = ssc.socketTextStream("localhost", 9999)
 ```
-这个`lines`变量是一个DStream，表示即将从数据服务器获得的流数据。这个DStream的每条记录都代表一行文本。下一步，我们需要将DStream中的每行文本都切分为单词。
+這個`lines`變數是一個DStream，表示即將從資料伺服器獲得的資料串流。這個DStream的每條紀錄都代表一行文字。下一步，我們需要將DStream中的每行文字都切分為單字。
 
 ```scala
 // Split each line into words
 val words = lines.flatMap(_.split(" "))
 ```
-`flatMap`是一个一对多的DStream操作，它通过把源DStream的每条记录都生成多条新记录来创建一个新的DStream。在这个例子中，每行文本都被切分成了多个单词，我们把切分
-的单词流用`words`这个DStream表示。下一步，我们需要计算单词的个数。
+`flatMap`是一個一對多的DStream操作，它通過把原DStream的每條紀錄都生成多條新紀錄來創建一個新的DStream。在這個例子中，每行文字都被切分成了多個單字，我們把切分
+的單字串流用`words`這個DStream表示。下一步，我們需要計算單字的個數。
 
 ```scala
 import org.apache.spark.streaming.StreamingContext._
@@ -36,10 +36,10 @@ val wordCounts = pairs.reduceByKey(_ + _)
 // Print the first ten elements of each RDD generated in this DStream to the console
 wordCounts.print()
 ```
-`words`这个DStream被mapper(一对一转换操作)成了一个新的DStream，它由（word，1）对组成。然后，我们就可以用这个新的DStream计算每批数据的词频。最后，我们用`wordCounts.print()`
-打印每秒计算的词频。
+`words`這個DStream被mapper(一對一轉換操作)成了一個新的DStream，它由（word，1）對組成。然後，我們就可以用這個新的DStream計算每批次資料的單字頻率。最後，我們用`wordCounts.print()`
+印出每秒計算的單字頻率。
 
-需要注意的是，当以上这些代码被执行时，Spark Streaming仅仅准备好了它要执行的计算，实际上并没有真正开始执行。在这些转换操作准备好之后，要真正执行计算，需要调用如下的方法
+需要注意的是，當以上這些程式碼被執行時，Spark Streaming僅僅準備好了它要執行的計算，實際上並没有真正開始執行。在這些轉換操作準備好之後，要真正執行計算，需要調用以下的函數
 
 ```scala
 ssc.start()             // Start the computation
@@ -47,12 +47,12 @@ ssc.awaitTermination()  // Wait for the computation to terminate
 ```
 完整的例子可以在[NetworkWordCount](https://github.com/apache/spark/blob/master/examples/src/main/scala/org/apache/spark/examples/streaming/NetworkWordCount.scala)中找到。
 
-如果你已经下载和构建了Spark环境，你就能够用如下的方法运行这个例子。首先，你需要运行Netcat作为数据服务器
+如果你已經下載和建構了Spark環境，你就能夠用以下的函數執行這個例子。首先，你需要運行Netcat作為資料伺服器
 
 ```shell
 $ nc -lk 9999
 ```
-然后，在不同的终端，你能够用如下方式运行例子
+然後，在不同的terminal，你能夠用如下方式執行例子
 ```shell
 $ ./bin/run-example streaming.NetworkWordCount localhost 9999
 ```
