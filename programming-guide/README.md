@@ -1,13 +1,13 @@
-# 概论
+# 概論
 
-在高层中，每个 Spark 应用程序都由一个*驱动程序(driver programe)*构成，驱动程序在集群上运行用户的 `mian` 函数来执行各种各样的*并行操作(parallel operations)*。Spark 的主要抽象是提供一个*弹性分布式数据集(RDD)*，RDD 是指能横跨集群所有节点进行并行计算的分区元素集合。RDDs 从 Hadoop 的文件系统中的一个文件中创建而来(或其他 Hadoop 支持的文件系统)，或者从一个已有的 Scala 集合转换得到。用户可以要求 Spark 将 RDD *持久化(persist)*到内存中，来让它在并行计算中高效地重用。最后，RDDs 能在节点失败中自动地恢复过来。
+每隻 Spark 應用程式都由一隻*驅動程式(driver programe)*構成，驅動程序在集群上運行用户的 `main` 函數来執行各式各樣的*併行操作(parallel operations)*。Spark 的主要抽象是提供一個*彈性分布式資料集(RDD)*，RDD 是指能横跨集群所有節點進行併行計算的分區元素集合。RDDs 從 Hadoop 的文件系统中的一個文件中產生而來(或其他 Hadoop 支持的文件系统)，或者從一個已有的 Scala 集合轉換得到。用戶可以將 Spark RDD *持久化(persist)*到記憶體中，讓它在併行計算中有效率的被重複使用。而且，RDDs 能在節點失敗中自動恢復。
 
-Spark 的第二个抽象是*共享变量(shared variables)*，共享变量能被运行在并行计算中。默认情况下，当 Spark 运行一个并行函数时，这个并行函数会作为一个任务集在不同的节点上运行，它会把函数里使用的每个变量都复制搬运到每个任务中。有时，一个变量需要被共享到交叉任务中或驱动程序和任务之间。Spark 支持 2 种类型的共享变量：*广播变量(broadcast variables)*，用来在所有节点的内存中缓存一个值；累加器(accumulators)，仅仅只能执行“添加(added)”操作，例如：记数器(counters)和求和(sums)。
+Spark 的第二個抽象是*共享變數(shared variables)*，共享變數被運行在併行運算中。默認情況下，當 Spark 運行一個併行函數時，這個併行函數會作為一個任務集在不同的節點上運行，它會把函數裡使用到的每個變數都複製移動到每個任務中。有時，一個變數需被共享到交叉任務中或驅動程式和任務之間。Spark 支持 2 種類型的共享變數：*廣播變數(broadcast variables)*，使用在所有節點的記憶體中快取一個值；累加器(accumulators)，只能執行“增加(added)”操作，例如：計數器(counters)和加總(sums)。
 
-这个指南会在 Spark 支持的所有语言中演示它的每一个特征。非常简单地开始一个 Spark 交互式 shell - `bin/spark-shell` 开始一个 Scala shell，或 `bin/pyspark` 开始一个 Python shell。
+這個指南會在 Spark 支持的所有語言中展示它的每一個特性。簡單的操作 Spark 互動式 shell - `bin/spark-shell` 操作 Scala shell，或 `bin/pyspark` 啟動一個 Python shell。
 
 * [引入 Spark](linking-with-spark.md)
 * [初始化 Spark](initializing-spark.md)
 * [Spark RDDs](rdds/README.md)
-* [共享变量](shared-variables.md)
-* [从这里开始](from-here.md)
+* [共享變數](shared-variables.md)
+* [從這裡開始](from-here.md)

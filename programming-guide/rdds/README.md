@@ -1,19 +1,19 @@
-# 弹性分布式数据集 (RDDs)
+# 彈性分布式資料集 (RDDs)
 
-Spark 核心的概念是 _Resilient Distributed Dataset (RDD)_：一个可并行操作的有容错机制的数据集合。有 2 种方式创建 RDDs：第一种是在你的驱动程序中并行化一个已经存在的集合；另外一种是引用一个外部存储系统的数据集，例如共享的文件系统，HDFS，HBase或其他 Hadoop 数据格式的数据源。
+Spark 核心概念是 _Resilient Distributed Dataset (RDD)_ ，你可以將它視為一個可以併型操作、有容錯機制的資料集和。目前有 2 種方式可以建立 RDDs：第一種是在你執行的驅動程式中併行化一個已經存在集合；另外一個方式是引用外部儲存系統的資料集，例如共享文件系統，HDFS，HBase或其他 Hadoop 資料格式的資料來源。
 
-* [并行集合](parallelized-collections.md)
-* [外部数据集](external-datasets.md)
+* [併行集合](parallelized-collections.md)
+* [外部資料集](external-datasets.md)
 * [RDD 操作](rdd-operations.md)
 <<<<<<< HEAD
-* [传递函数到 Spark](passing-functions-to-spark.md)
-* [使用键值对](working-with-key-value-pairs.md)
+* [傳送函數到 Spark](passing-functions-to-spark.md)
+* [使用鍵值對](working-with-key-value-pairs.md)
 * [Transformations](transformations.md)
 * [Actions](actions.md)
-* [RDD持久化](rdd-persistences.md)
+* [RDD 持久化](rdd-persistences.md)
 =======
-  * [传递函数到 Spark](passing-functions-to-spark.md)
-  * [使用键值对](working-with-key-value-pairs.md)
+  * [傳送函數到 Spark](passing-functions-to-spark.md)
+  * [使用鍵值對](working-with-key-value-pairs.md)
   * [Transformations](transformations.md)
   * [Actions](actions.md)
 * [RDD 持久化](rdd_persistence.md)
