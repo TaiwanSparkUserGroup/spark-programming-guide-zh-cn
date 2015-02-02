@@ -26,4 +26,4 @@
 
    2. 藉由不同的group和topic，可以創建多個輸入DStream，從而利用多個`receiver`並發的接收資料。
 
-- 部署：將`spark-streaming-kafka_2.10`和它的Dependencies（除了`spark-core_2.10`和`spark-streaming_2.10`）打包到應用程式的jar包中。然後用`spark-submit`函數啟動你的應用程式。
+- 部署：將`spark-streaming-kafka_2.10`和它的Dependencies（除了`spark-core_2.10`和`spark-streaming_2.10`）打包到應用程式的jar檔中。然後用`spark-submit`函數啟動你的應用程式。
