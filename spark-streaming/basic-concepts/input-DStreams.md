@@ -38,7 +38,7 @@ Spark Streaming將會監控`dataDirectory`目錄，並且處理目錄下生成�
 
 - 基於自定義actor的串流：DStream可以調用`streamingContext.actorStream(actorProps, actor-name)`函數從Akka actors獲取的資料串流來創建。具體的訊息見[自定義receiver指南](https://spark.apache.org/docs/latest/streaming-custom-receivers.html#implementing-and-using-a-custom-actor-based-receiver)
 `actorStream`在Python API中不可用。
-- RDD隊列作為資料串流：為了用測試資料測試Spark Streaming應用程式，人們也可以調用`streamingContext.queueStream(queueOfRDDs)`函數基於RDD隊列創建DStreams。每個push到隊列的RDD都被
+- RDD佇列作為資料串流：為了用測試資料測試Spark Streaming應用程式，人們也可以調用`streamingContext.queueStream(queueOfRDDs)`函數基於RDD佇列創建DStreams。每個push到佇列的RDD都被
 當做DStream的批次資料，像串流一樣處理。
 
 關於從socket、文件和actor中獲取串流的更多細節，請看[StreamingContext](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.streaming.StreamingContext)和
