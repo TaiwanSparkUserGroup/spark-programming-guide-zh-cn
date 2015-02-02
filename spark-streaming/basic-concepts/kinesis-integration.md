@@ -41,7 +41,7 @@ apache 2.0許可的AWS java SDK之上，藉由Workers、檢查點(Checkpoints)�
   - checkpoint interval：KCL在流中保存檢查點位置的時間間隔，對於初学者，可以將其和串流應用程式的批時間間隔設定得一致。
   - initial position：可以是`InitialPositionInStream.TRIM_HORIZON`也可以是`InitialPositionInStream.LATEST`(可以查看Kinesis checkpoint和Amazon Kinesis API文件了解詳細訊息)
 
-3、部署：將`spark-streaming-kinesis-asl_2.10`和它的Dependencies（除了`spark-core_2.10`和`spark-streaming_2.10`）打包到應用程式的jar包中。然後用`spark-submit`函數啟動你的應用程式。
+3、部署：將`spark-streaming-kinesis-asl_2.10`和它的Dependencies（除了`spark-core_2.10`和`spark-streaming_2.10`）打包到應用程式的jar檔中。然後用`spark-submit`函數啟動你的應用程式。
 
 在運行過程中需要注意一下幾點:
 

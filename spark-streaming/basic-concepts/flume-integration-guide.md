@@ -48,7 +48,7 @@ agent.sinks.avroSink.port = <chosen port on the machine>
 
 注意，hostname必須和集群(Mesos,YARN或者Spark Standalone)的resource manager所使用的機器的hostname是同一個，這樣就可以根據名稱分配资料來源，在正確的機器上啟動`receiver`。
 
-- 部署：將`spark-streaming-flume_2.10`和它的Dependencies（除了`spark-core_2.10`和`spark-streaming_2.10`）打包到應用程式jar包中。然後用`spark-submit`函數啟動你的應用程式。
+- 部署：將`spark-streaming-flume_2.10`和它的Dependencies（除了`spark-core_2.10`和`spark-streaming_2.10`）打包到應用程式jar檔中。然後用`spark-submit`函數啟動你的應用程式。
 
 
 ## 函數2：利用自定義sink的基於pull的函數
@@ -105,7 +105,7 @@ agent.sinks.avroSink.port = <chosen port on the machine>
 
 注意，每個輸入DStream都可以配置為從多個sink接收資料。
 
-- 部署：將`spark-streaming-flume_2.10`和它的Dependencies（除了`spark-core_2.10`和`spark-streaming_2.10`）打包到應用程式的jar包中。然後用`spark-submit`函數啟動你的應用程式。
+- 部署：將`spark-streaming-flume_2.10`和它的Dependencies（除了`spark-core_2.10`和`spark-streaming_2.10`）打包到應用程式的jar檔中。然後用`spark-submit`函數啟動你的應用程式。
 
 
 

@@ -10,7 +10,7 @@ Spark streaming是Spark核心API的一個擴充，它對即時資料串流的處
 
 ![Spark Streaming處理原理](../img/streaming-flow.png)
 
-Spark Streaming支持一個高層的抽象類別類別，叫做離散化串流(`discretized stream`)或者`DStream`，它代表連續的資料串流。DStream既可以利用從Kafka, Flume和Kinesis等來源取得的輸入資料串流創建，也可以
+Spark Streaming支援一個高層的抽象類別類別，叫做離散化串流(`discretized stream`)或者`DStream`，它代表連續的資料串流。DStream既可以利用從Kafka, Flume和Kinesis等來源取得的輸入資料串流創建，也可以
 在其他DStream的基礎上藉由高階函式獲得。在内部，DStream是由一系列RDDs組成。
 
 本指南指導使用者開始利用DStream編寫Spark Streaming程式。使用者能夠利用scala、java或者Python來編寫Spark Streaming程式。
@@ -22,7 +22,7 @@ Spark Streaming支持一個高層的抽象類別類別，叫做離散化串流(`
 * [基本概念](basic-concepts/README.md)
   * [連接](basic-concepts/linking.md)
   * [初始化StreamingContext](basic-concepts/initializing-StreamingContext.md)
-  * [离散化串流](basic-concepts/discretized-streams.md)
+  * [離散化串流](basic-concepts/discretized-streams.md)
   * [輸入DStreams](basic-concepts/input-DStreams.md)
   * [DStream中的轉換](basic-concepts/transformations-on-DStreams.md)
   * [DStream的輸出操作](basic-concepts/output-operations-on-DStreams.md)

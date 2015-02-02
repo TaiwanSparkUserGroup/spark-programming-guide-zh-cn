@@ -7,7 +7,7 @@
 - 基本來源（Basic sources）：這些來源在StreamingContext API中直接可用。例如檔案系統、socket連接、Akka的actor等。
 - 高級來源（Advanced sources）：這些來源包括Kafka,Flume,Kinesis,Twitter等等。它們需要藉由额外的類來使用。我們在[連接](linking.md)那一節討論了類Dependencies。
 
-需要注意的是，如果你想在一個串流應用中並行地創建多個輸入DStream來接收多個資料串流，你能夠創建多個輸入串流（這將在[性能調教](../performance-tuning/README.md)那一節介紹）
+需要注意的是，如果你想在一個串流應用中平行地創建多個輸入DStream來接收多個資料串流，你能夠創建多個輸入串流（這將在[性能調教](../performance-tuning/README.md)那一節介紹）
 。它將創建多個Receiver同時接收多個資料串流。但是，`receiver`作為一個長期運行的任務運行在Spark worker或executor中。因此，它占有一個核，這個核是分配给Spark Streaming應用程式的所有
 核中的一個（it occupies one of the cores allocated to the Spark Streaming application）。所以，為Spark Streaming應用程式分配足夠的核（如果是本地運行，那麼是執行緒）
 用以處理接收的資料並且運行`receiver`是非常重要的。
@@ -18,7 +18,7 @@
 
 ## 基本來源
 
-我們已經在[快速例子](../a-quick-example.md)中看到，`ssc.socketTextStream(...)`函數用來把從TCPsocket獲取的文本資料創建成DStream。除了socket，StreamingContext API也支持把文件
+我們已經在[快速例子](../a-quick-example.md)中看到，`ssc.socketTextStream(...)`函數用來把從TCPsocket獲取的文本資料創建成DStream。除了socket，StreamingContext API也支援把文件
 以及Akka actors作為輸入來源創建DStream。
 
 - 檔案串流（File Streams）：從任何與HDFS API兼容的檔案系統中讀取資料，一個DStream可以藉由如下方式創建
@@ -26,7 +26,7 @@
 ```scala
 streamingContext.fileStream[keyClass, valueClass, inputFormatClass](dataDirectory)
 ```
-Spark Streaming將會監控`dataDirectory`目錄，並且處理目錄下生成的任何文件（嵌套目錄不被支持）。需要注意一下三點：
+Spark Streaming將會監控`dataDirectory`目錄，並且處理目錄下生成的任何文件（嵌套目錄不被支援）。需要注意一下三點：
 
     1 所有文件必須具有相同的資料格式
     2 所有文件必須在`dataDirectory`目錄下創建，文件是自動的移動和重命名到資料目錄下
@@ -38,7 +38,7 @@ Spark Streaming將會監控`dataDirectory`目錄，並且處理目錄下生成�
 
 - 基於自定義actor的串流：DStream可以調用`streamingContext.actorStream(actorProps, actor-name)`函數從Akka actors獲取的資料串流來創建。具體的訊息見[自定義receiver指南](https://spark.apache.org/docs/latest/streaming-custom-receivers.html#implementing-and-using-a-custom-actor-based-receiver)
 `actorStream`在Python API中不可用。
-- RDD隊列作為資料串流：為了用測試資料測試Spark Streaming應用程式，人們也可以調用`streamingContext.queueStream(queueOfRDDs)`函數基於RDD隊列創建DStreams。每個push到隊列的RDD都被
+- RDD佇列作為資料串流：為了用測試資料測試Spark Streaming應用程式，人們也可以調用`streamingContext.queueStream(queueOfRDDs)`函數基於RDD佇列創建DStreams。每個push到佇列的RDD都被
 當做DStream的批次資料，像串流一樣處理。
 
 關於從socket、文件和actor中獲取串流的更多細節，請看[StreamingContext](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.streaming.StreamingContext)和
@@ -55,13 +55,13 @@ Spark Streaming將會監控`dataDirectory`目錄，並且處理目錄下生成�
 import org.apache.spark.streaming.twitter._
 TwitterUtils.createStream(ssc)
 ```
-- 部署：將編寫的程式以及其所有的Dependencies（包括spark-streaming-twitter_2.10的Dependencies以及它的傳遞Dependencies）打為jar包，然後部署。這在[部署章節](deploying-applications.md)將會作更進一步的介紹。
+- 部署：將編寫的程式以及其所有的Dependencies（包括spark-streaming-twitter_2.10的Dependencies以及它的傳遞Dependencies）包裝為jar檔，然後部署。這在[部署章節](deploying-applications.md)將會作更進一步的介紹。
 
 需要注意的是，這些高級的來源在`spark-shell`中不能被使用，因此基於這些來源的應用程式無法在shell中測試。
 
 下面將介紹部分的高級來源：
 
-- Twitter：Spark Streaming利用`Twitter4j 3.0.3`獲取公共的推文流，這些推文藉由[推特流API](https://dev.twitter.com/docs/streaming-apis)獲得。認證訊息可以藉由Twitter4J函式庫支持的
+- Twitter：Spark Streaming利用`Twitter4j 3.0.3`獲取公共的推文流，這些推文藉由[推特流API](https://dev.twitter.com/docs/streaming-apis)獲得。認證訊息可以藉由Twitter4J函式庫支援的
 任何[函數](http://twitter4j.org/en/configuration.html)提供。你既能夠得到公共串流，也能夠得到基於關键字過濾後的串流。你可以查看API文件（[scala](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.streaming.twitter.TwitterUtils$)和[java](https://spark.apache.org/docs/latest/api/java/index.html?org/apache/spark/streaming/twitter/TwitterUtils.html)）
 和例子（[TwitterPopularTags](https://github.com/apache/spark/blob/master/examples/src/main/scala/org/apache/spark/examples/streaming/TwitterPopularTags.scala)和[TwitterAlgebirdCMS](https://github.com/apache/spark/blob/master/examples/src/main/scala/org/apache/spark/examples/streaming/TwitterAlgebirdCMS.scala)）
 - Flume：Spark Streaming 1.2能夠從flume 1.4.0中獲取資料，可以查看[flume整合指南](flume-integration-guide.md)了解詳細訊息
@@ -70,7 +70,7 @@ TwitterUtils.createStream(ssc)
 
 ## 自定義來源
 
-在Spark 1.2中，這些來源不被Python API支持。
+在Spark 1.2中，這些來源不被Python API支援。
 輸入DStream也可以藉由自定義來源創建，你需要做的是實作用戶自定義的`receiver`，這個`receiver`可以從自定義來源接收資料以及將資料推到Spark中。藉由[自定義receiver指南](custom-receiver.md)了解詳細訊息
 
 ## Receiver可靠性
@@ -78,6 +78,6 @@ TwitterUtils.createStream(ssc)
 基於可靠性有兩類資料來源。來源(如kafka、flume)允許。如果從這些可靠的來源獲取資料的系统能夠正確的響應所接收的資料，它就能夠確保在任何情況下不丢失資料。這樣，就有兩種類型的receiver：
 
 - Reliable Receiver：一個可靠的receiver正確的響應一個可靠的來源，資料已經收到並且被正確地複製到了Spark中。
-- Unreliable Receiver ：這些receivers不支持響應。即使對於一個可靠的來源，開發者可能實作一個非可靠的receiver，這個receiver不會正確響應。
+- Unreliable Receiver ：這些receivers不支援響應。即使對於一個可靠的來源，開發者可能實作一個非可靠的receiver，這個receiver不會正確響應。
 
 怎樣編寫可靠的Receiver的細節在[自定義receiver](custom-receiver.md)中有詳細介紹。

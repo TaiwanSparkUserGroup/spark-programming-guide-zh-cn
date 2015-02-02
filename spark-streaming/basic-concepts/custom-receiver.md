@@ -87,7 +87,7 @@ val words = lines.flatMap(_.split(" "))
 
 - Reliable Receiver：可靠的來源允許發送的資料被確認。一個可靠的receiver正確的響應一個可靠的來源，資料已經收到並且被正確地複製到了Spark中（指正確完成複製）。實作這個receiver並
 仔細考慮來源確認的語意。
-- Unreliable Receiver ：這些receivers不支持響應。即使對於一個可靠的來源，開發者可能實作一個非可靠的receiver，這個receiver不會正確響應。
+- Unreliable Receiver ：這些receivers不支援響應。即使對於一個可靠的來源，開發者可能實作一個非可靠的receiver，這個receiver不會正確響應。
 
 為了實作可靠receiver，你必須使用`store(multiple-records)`去保存資料。保存的類型是阻塞訪問，即所有给定的紀錄全部保存到Spark中後才返回。如果receiver的配置儲存級别利用複製
 (預設情況是複製)，則會在複製结束之後返回。因此，它確保資料被可靠地儲存，receiver恰當的響應给來源。這保證在複製的過程中，没有資料造成的receiver失敗。因為緩衝區資料不會響應，從而

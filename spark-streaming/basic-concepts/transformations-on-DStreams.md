@@ -1,16 +1,16 @@
 # DStream中的轉換（transformation）
 
-和RDD類似，transformation允許從輸入DStream來的資料被修改。DStreams支持很多在RDD中可用的transformation操作。一些常用的操作如下所示：
+和RDD類似，transformation允許從輸入DStream來的資料被修改。DStreams支援很多在RDD中可用的transformation操作。一些常用的操作如下所示：
 
 Transformation | Meaning
 --- | ---
 map(func) | 利用函數`func`處理原DStream的每個元素，返回一個新的DStream
 flatMap(func) | 與map相似，但是每個輸入項可用被映射為0個或者多個輸出項
 filter(func) | 返回一個新的DStream，它僅僅包含來源DStream中滿足函數func的項
-repartition(numPartitions) | 藉由創建更多或者更少的partition改變這個DStream的並行級别(level of parallelism)
+repartition(numPartitions) | 藉由創建更多或者更少的partition改變這個DStream的平行級别(level of parallelism)
 union(otherStream) | 返回一個新的DStream,它包含來源DStream和otherStream的联合元素
 count() | 藉由計算來源DStream中每個RDD的元素數量，返回一個包含單元素(single-element)RDDs的新DStream
-reduce(func) | 利用函數func聚集來源DStream中每個RDD的元素，返回一個包含單元素(single-element)RDDs的新DStream。函數應該是相連接的，以使計算可以並行化
+reduce(func) | 利用函數func聚集來源DStream中每個RDD的元素，返回一個包含單元素(single-element)RDDs的新DStream。函數應該是相連接的，以使計算可以平行化
 countByValue() | 這個操作應用於元素類型為K的DStream上，返回一個（K,long）對的新DStream，每個键的值是在原DStream的每個RDD中的频率。
 reduceByKey(func, [numTasks]) | 當在一個由(K,V)對組成的DStream上調用這個操作，返回一個新的由(K,V)對組成的DStream，每一個key的值均由给定的reduce函數聚集起來。注意：在預設情況下，這個操作利用了Spark預設的並發任務數去分组。你可以用`numTasks`參數設定不同的任務數
 join(otherStream, [numTasks]) | 當應用於兩個DStream（一個包含（K,V）對,一個包含(K,W)對），返回一個包含(K, (V, W))對的新DStream
@@ -76,7 +76,7 @@ val cleanedDStream = wordCounts.transform(rdd => {
 
 ## 窗口(window)操作
 
-Spark Streaming也支持窗口計算，它允許你在一個滑動窗口資料上應用transformation操作。下圖阐明了這個滑動窗口。
+Spark Streaming也支援窗口計算，它允許你在一個滑動窗口資料上應用transformation操作。下圖阐明了這個滑動窗口。
 
 ![滑動窗口](../../img/streaming-dstream-window.png)
 
@@ -102,7 +102,7 @@ Transformation | Meaning
 --- | ---
 window(windowLength, slideInterval) | 基於來源DStream產生的窗口化的批次資料計算一個新的DStream
 countByWindow(windowLength, slideInterval) | 返回流中元素的一個滑動窗口數
-reduceByWindow(func, windowLength, slideInterval) | 返回一個單元素流。利用函數func聚集滑動時間間隔的流的元素創建這個單元素流。函數必須是相連接的以使計算能夠正確的並行計算。
+reduceByWindow(func, windowLength, slideInterval) | 返回一個單元素流。利用函數func聚集滑動時間間隔的流的元素創建這個單元素流。函數必須是相連接的以使計算能夠正確的平行計算。
 reduceByKeyAndWindow(func, windowLength, slideInterval, [numTasks]) | 應用到一個(K,V)對組成的DStream上，返回一個由(K,V)對組成的新的DStream。每一個key的值均由给定的reduce函數聚集起來。注意：在預設情況下，這個操作利用了Spark預設的並發任務數去分组。你可以用`numTasks`參數設定不同的任務數
 reduceByKeyAndWindow(func, invFunc, windowLength, slideInterval, [numTasks]) | A more efficient version of the above reduceByKeyAndWindow() where the reduce value of each window is calculated incrementally using the reduce values of the previous window. This is done by reducing the new data that enter the sliding window, and "inverse reducing" the old data that leave the window. An example would be that of "adding" and "subtracting" counts of keys as the window slides. However, it is applicable to only "invertible reduce functions", that is, those reduce functions which have a corresponding "inverse reduce" function (taken as parameter invFunc. Like in reduceByKeyAndWindow, the number of reduce tasks is configurable through an optional argument.
 countByValueAndWindow(windowLength, slideInterval, [numTasks]) | 應用到一個(K,V)對組成的DStream上，返回一個由(K,V)對組成的新的DStream。每個key的值都是它們在滑動窗口中出現的频率。

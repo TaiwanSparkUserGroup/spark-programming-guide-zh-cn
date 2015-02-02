@@ -6,7 +6,7 @@
 - Metadata checkpointing：保存流計算的定義訊息到容錯儲存系统如HDFS中。這用來恢復應用程式中運行worker的節點的故障。元資料包括
     - Configuration ：創建Spark Streaming應用程式的配置訊息
     - DStream operations ：定義Streaming應用程式的操作集合
-    - Incomplete batches：操作存在隊列中的未完成的批次
+    - Incomplete batches：操作存在佇列中的未完成的批次
 - Data checkpointing ：保存生成的RDD到可靠的儲存系统中，這在有狀態transformation（如结合跨多個批次的資料）中是必須的。在這樣一個transformation中，生成的RDDDependencies於之前
 批的RDD，隨着時間的推移，這個依賴鏈的長度會持續增長。在恢復的過程中，為了避免這種無限增長。有狀態的transformation的中間RDD將會定時地儲存到可靠儲存系统中，以截斷這個依賴鏈。
 
