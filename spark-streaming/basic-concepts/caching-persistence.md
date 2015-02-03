@@ -1,7 +1,7 @@
-# 缓存或持久化
+# 暫存或持續化
 
-和RDD相似，DStreams也允许开发者持久化流数据到内存中。在DStream上使用`persist()`方法可以自动地持久化DStream中的RDD到内存中。如果DStream中的数据需要计算多次，这是非常有用的。像`reduceByWindow`和`reduceByKeyAndWindow`这种窗口操作、`updateStateByKey`这种基于状态的操作，持久化是默认的，不需要开发者调用`persist()`方法。
+和RDD相似，DStreams也允許開發者持續化串流資料到記憶體中。在DStream上使用`persist()`函數可以自動地持續化DStream中的RDD到記憶體中。如果DStream中的資料需要計算多次，這是非常有用的。像`reduceByWindow`和`reduceByKeyAndWindow`這種窗口操作、`updateStateByKey`這種基於狀態的操作，持續化是預設的，不需要開發者調用`persist()`函數。
 
-例如通过网络（如kafka，flume等）获取的输入数据流，默认的持久化策略是复制数据到两个不同的节点以容错。
+例如藉由網路（如kafka，flume等）獲取的輸入資料串流，預設的持續化策略是複製資料到兩個不同的節點以容錯。
 
-注意，与RDD不同的是，DStreams默认持久化级别是存储序列化数据到内存中，这将在[性能调优](../performance-tuning/README.md)章节介绍。更多的信息请看[rdd持久化](../../programming-guide/rdds/rdd-persistences.md)
+注意，與RDD不同的是，DStreams預設持續化級别是儲存序列化資料到記憶體中，這將在[性能調教](../performance-tuning/README.md)章節介紹。更多的訊息請看[rdd持續化](../../programming-guide/rdds/rdd-persistences.md)

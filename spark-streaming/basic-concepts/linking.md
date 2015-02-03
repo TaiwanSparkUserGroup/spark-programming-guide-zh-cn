@@ -1,6 +1,6 @@
-# 关联
+# 連接
 
-与Spark类似，Spark Streaming也可以利用maven仓库。编写你自己的Spark Streaming程序，你需要引入下面的依赖到你的SBT或者Maven项目中
+與Spark類似，Spark Streaming也可以利用maven函式庫。編寫你自己的Spark Streaming程式，你需要引入下面的Dependencies到你的SBT或者Maven項目中
 
 ```maven
 <dependency>
@@ -9,7 +9,7 @@
     <version>1.2</version>
 </dependency>
 ```
-为了从Kafka, Flume和Kinesis这些不在Spark核心API中提供的源获取数据，我们需要添加相关的模块`spark-streaming-xyz_2.10`到依赖中。例如，一些通用的组件如下表所示：
+為了從Kafka, Flume和Kinesis這些不在Spark核心API中提供的來源獲取資料，我們需要添加相關的模區塊`spark-streaming-xyz_2.10`到Dependencies中。例如，一些通用的组件如下表所示：
 
 Source | Artifact
 --- | ---
@@ -20,4 +20,4 @@ Twitter | spark-streaming-twitter_2.10
 ZeroMQ | spark-streaming-zeromq_2.10
 MQTT | spark-streaming-mqtt_2.10
 
-为了获取最新的列表，请访问[Apache repository](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.apache.spark%22%20AND%20v%3A%221.2.0%22)
+為了獲取最新的列表，請訪問[Apache repository](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.apache.spark%22%20AND%20v%3A%221.2.0%22)
