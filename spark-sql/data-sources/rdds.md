@@ -1,17 +1,14 @@
-# RDDs
+# [RDDs](https://spark.apache.org/docs/latest/sql-programming-guide.html#rdds)
 
-Spark支持两种方法将存在的RDDs转换为SchemaRDDs。第一种方法使用反射来推断包含特定对象类型的RDD的模式(schema)。在你写spark程序的同时，当你已经知道了模式，这种基于反射的
-方法可以使代码更简洁并且程序工作得更好。
+Spark 支持兩種方法將存在的 RDDs 轉換為 SchemaRDDs 。第一種方法使用映射來推斷包含特定對象類型的RDD模式(schema)。在你寫 spark 程序的同時，當你已經知道了模式，這種基於映射的方法可以使代碼更簡潔並且程序工作得更好。
 
-创建SchemaRDDs的第二种方法是通过一个编程接口来实现，这个接口允许你构造一个模式，然后在存在的RDDs上使用它。虽然这种方法更冗长，但是它允许你在运行期之前不知道列以及列
-的类型的情况下构造SchemaRDDs。
+創建 SchemaRDDs 的第二種方法是通過一個編程接口來實現，這個接口允许你建構一個模式，然後在存在的 RDDs 上使用它。雖然這種方法更冗長，但是它允許你在運行期之前不知道列以及列的類型的情况下構造 SchemaRDDs。
 
-## 利用反射推断模式
+## 利用映射推断(inffering)模式(scheme)
 
-Spark SQL的Scala接口支持将包含样本类的RDDs自动转换为SchemaRDD。这个样本类定义了表的模式。
+Spark SQL的Scala接口支持將包含樣本類(case class)的 RDDs 自動轉換為 SchemaRDD。這個樣本類(case class)定義了表的模式。
 
-给样本类的参数名字通过反射来读取，然后作为列的名字。样本类可以嵌套或者包含复杂的类型如序列或者数组。这个RDD可以隐式转化为一个SchemaRDD，然后注册为一个表。表可以在后续的
-sql语句中使用。
+給樣本類的參數名字通過映射來讀取，然後作為列的名字。樣本類可以嵌套或者包含複雜的類型如序列或者數組。這個 RDD 可以隱式轉化為一個 SchemaRDD ，然後註冊為一個表。表可以在後續的 sql 語句中使用。
 
 ```scala
 // sc is an existing SparkContext.
@@ -36,13 +33,13 @@ val teenagers = sqlContext.sql("SELECT name FROM people WHERE age >= 13 AND age 
 teenagers.map(t => "Name: " + t(0)).collect().foreach(println)
 ```
 
-## 编程指定模式
+## [编程指定模式](https://spark.apache.org/docs/latest/sql-programming-guide.html#programmatically-specifying-the-schema)
 
-当样本类不能提前确定（例如，记录的结构是经过编码的字符串，或者一个文本集合将会被解析，不同的字段投影给不同的用户），一个SchemaRDD可以通过三步来创建。
+當樣本類不能提前確定（例如，記錄的結構是經過編碼的字串，或者一個文本集合將會被解析，不同的字段投射给不同的用戶），一个 SchemaRDD 可以通过三步来创建。
 
-- 从原来的RDD创建一个行的RDD
-- 创建由一个`StructType`表示的模式与第一步创建的RDD的行结构相匹配
-- 在行RDD上通过`applySchema`方法应用模式
+- 從原來的 RDD 創建一個行的 RDD
+- 創建由一个 `StructType` 表示的模式與第一步創建的 RDD 的行結構相匹配
+- 在行 RDD 上通過 `applySchema` 方法應用模式
 
 ```scala
 // sc is an existing SparkContext.
