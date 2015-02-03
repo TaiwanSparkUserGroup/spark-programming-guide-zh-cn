@@ -53,3 +53,8 @@
 1. commit 你的更新，並於更新訊息簡單說明更新的內容。如果更新很多檔案，請分批提交
 2. 首先 push 到你的Github
 3. 然後登錄 GitHub，在你的 repo 的首頁可以看到一個 ``pull request`` 按鈕，點擊它，填寫一些說明資訊，然後提交即可。
+
+常見問題
+--------
+Q: merge 衝突啦 怎麼辦
+A: 每次要修改前，請先重新pull遠端的程式庫，保證目前是最新的版本。如果發生錯誤請參考[這篇](https://github.com/doggy8088/Learn-Git-in-30-days/blob/master/docs/17%20%E9%97%9C%E6%96%BC%E5%90%88%E4%BD%B5%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%A7%80%E5%BF%B5%E8%88%87%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F.markdown)
