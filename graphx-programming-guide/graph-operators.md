@@ -1,8 +1,6 @@
-# 图操作符
+# 圖形操作
 
-正如RDDs有基本的操作map, filter和reduceByKey一样，属性图也有基本的集合操作，这些操作采用用户自定义的函数并产生包含转换特征和结构的新图。定义在[Graph](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph)中的
-核心操作是经过优化的实现。表示为核心操作的组合的便捷操作定义在[GraphOps](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps)中。然而，
-因为有Scala的隐式转换，定义在`GraphOps`中的操作可以作为`Graph`的成员自动使用。例如，我们可以通过下面的方式计算每个顶点(定义在GraphOps中)的入度。
+就像RDDs基本的操作map、filter和reduceByKey一樣，屬性圖形也有基本操作集合的指令，這些操作採用使用者自訂義的函數並產生新轉換後的特徵和結構的新圖形。在[Graph](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph)中實作了優化的核心操作。以及[GraphOps](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps)中定義的表示為核心操作組合的快捷操作。由於Scala中有隱含轉換，故`GraphOps`中的操作可以作為`Graph`的成員直接使用。例如，我們可以透過下方的例子來計算每個節點（定義在`GraphOps`）的內分支度。
 
 ```scala
 val graph: Graph[(String, String), String]
@@ -10,9 +8,9 @@ val graph: Graph[(String, String), String]
 val inDegrees: VertexRDD[Int] = graph.inDegrees
 ```
 
-区分核心图操作和`GraphOps`的原因是为了在将来支持不同的图表示。每个图表示都必须提供核心操作的实现并重用很多定义在`GraphOps`中的有用操作。
+區分核心圖形操作和`GraphOps`的原因是為了能在未來支援不同的圖形表示。每個圖形表示都必須提供核心操作的實作和重複使用定義在`GraphOps`中有用的操作。
 
-## 操作一览
+## 操作指令清單
 
 一下是定义在`Graph`和`GraphOps`中（为了简单起见，表现为图的成员）的功能的快速浏览。注意，某些函数签名已经简化（如默认参数和类型的限制已删除），一些更高级的功能已经被
 删除，所以请参阅API文档了解官方的操作列表。
