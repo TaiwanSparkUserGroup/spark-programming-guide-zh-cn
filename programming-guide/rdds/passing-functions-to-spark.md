@@ -1,9 +1,9 @@
-# 传递函数到 Spark
+# 傳遞函數到 Spark
 
-Spark 的 API 很大程度上依靠在驱动程序里传递函数到集群上运行。这里有两种推荐的方式：
+Spark 的 API 大多數是依靠在驅動程式裡傳遞函數到集群上運作，目前有兩種推薦方式：
 
-- [匿名函数 (Anonymous function syntax)](http://docs.scala-lang.org/tutorials/tour/anonymous-function-syntax.html)，可以在比较短的代码中使用。
-- 全局单例对象里的静态方法。例如，你可以定义 `object MyFunctions` 然后传递 `MyFounctions.func1`，像下面这样：
+- [ 匿名函數  (Anonymous function syntax)](http://docs.scala-lang.org/tutorials/tour/anonymous-function-syntax.html)，可在較短的程式碼中使永。
+- 全局單例物件裡的靜態方法。例如，定義 `object MyFunctions` 然後傳遞 `MyFounctions.func1`，例如：
 
 ```scala
 object MyFunctions {
@@ -13,7 +13,7 @@ object MyFunctions {
 myRdd.map(MyFunctions.func1)
 ```
 
-注意，它可能传递的是一个类实例里的一个方法引用(而不是一个单例对象)，这里必须传送包含方法的整个对象。例如：
+注意，它可能傳遞的是一個類別實例裡面的一個方法(非一個單例物件)，在這裡，必須傳送包含方法的整個物件。例如：
 
 ```scala
 class MyClass {
@@ -22,9 +22,9 @@ class MyClass {
 }
 ```
 
-这里，如果我们创建了一个 `new MyClass` 对象，并且调用它的 `doStuff`，`map` 里面引用了这个 `MyClass` 实例中的 `func1` 方法，所以这个对象必须传送到集群上。类似写成 `rdd.map(x => this.func1(x))`。
+如果我們建立一個 `new MyClass` 物件，並且使用它的 `doStuff`，`map` 裡面引用了這個 `MyClass` 中的 `func1` 方法，所以這個物件必須也傳送到集群上。類似寫成 `rdd.map(x => this.func1(x))`。
 
-以类似的方式，访问外部对象的字段将会引用整个对象：
+以同樣的方式，存取外部物件的變數將會引用整個物件：
 
 ```scala
 class MyClass {
@@ -33,7 +33,7 @@ class MyClass {
 }
 ```
 
-相当于写成 `rdd.map(x => this.field + x)`，引用了整个 `this` 对象。为了避免这个问题，最简单的方式是复制 `field` 到一个本地变量而不是从外部访问它：
+等於寫成 `rdd.map(x => this.field + x)`，引用整個 `this` 物件。為了避免這個問題，最簡單的方式是複製 `field` 到一個本地變數而不是從外部取用：
 
 ```scala
 def doStuff(rdd: RDD[String]): RDD[String] = {
