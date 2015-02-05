@@ -19,7 +19,7 @@ GraphX是一個新的（alpha） Spark API，它用於圖形（Graph）和平行
 
 GraphX的目的就是將`grap-parallel`和`data-parallel`整合成一個系統中，而且只有一個整合後的API。GraphX允許使用者將資料視為一個圖形和集合（RDDs），而不需要任何的資料搬移和複製。最新的`graph-parallel`系統，使得GraphX能夠優化圖形指令的執行。
 
-* [開始](getting-started.md)
+* [入門](getting-started.md)
 * [圖形特性](property-graph.md)
 * [圖形操作](graph-operators.md)
 * [Pregel API](pregel-api.md)

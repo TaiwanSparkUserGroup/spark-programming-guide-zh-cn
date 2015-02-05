@@ -1,15 +1,14 @@
-# 图算法
+# 圖形演算法
 
-GraphX包括一组图算法来简化分析任务。这些算法包含在`org.apache.spark.graphx.lib`包中，可以被直接访问。
+GraphX具備一系列的圖形演算法來簡化圖形分系的任務。這些演算法都在`org.apache.spark.graphx.lib`，可以直接透過`Graph`中的`GraphOps`來取得。這章節將會描述如何使用這些圖形演算法。
 
-## PageRank算法
+## PageRank
 
-PageRank度量一个图中每个顶点的重要程度，假定从u到v的一条边代表v的重要性标签。例如，一个Twitter用户被许多其它人粉，该用户排名很高。GraphX带有静态和动态PageRank的实现方法
-，这些方法在[PageRank object](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.lib.PageRank$)中。静态的PageRank运行固定次数
-的迭代，而动态的PageRank一直运行，直到收敛。[GraphOps]()允许直接调用这些算法作为图上的方法。
+PageRank是用來衡量一個圖形中每個節點的重要程度，假設有一條從u到v的邊，這條邊稱為u給v的重要性指標。例如，一個Twitter使用者有許多追隨者，如此一來，可以認為這名使用者相當重要。
 
-GraphX包含一个我们可以运行PageRank的社交网络数据集的例子。用户集在`graphx/data/users.txt`中，用户之间的关系在`graphx/data/followers.txt`中。我们通过下面的方法计算
-每个用户的PageRank。
+在GraphX中的[PageRank object](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.lib.PageRank$)實作了靜態和動態PageRank的方法。靜態的PageRank會在固定的次數內運行，而動態的PageRank則會一直運行，直到收斂。[GraphOps](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps)允許直接呼叫這些方法。
+
+GraphX內有一個範例，可以讓我們直接在社群媒體資料集上運行PageRank演算法。使用者的資料在`graphx/data/users.txt`，使用者之間的關係在`graphx/data/followers.txt`中。我們可以透過以下來計算出每個使用者的PageRank。
 
 ```scala
 // Load the edges as a graph
