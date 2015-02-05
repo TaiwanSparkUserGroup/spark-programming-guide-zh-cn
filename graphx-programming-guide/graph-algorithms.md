@@ -1,6 +1,6 @@
 # 圖形演算法
 
-GraphX具備一系列的圖形演算法來簡化圖形分系的任務。這些演算法都在`org.apache.spark.graphx.lib`，可以直接透過`Graph`中的`GraphOps`來取得。這章節將會描述如何使用這些圖形演算法。
+GraphX具備一系列的圖形演算法來簡化圖形分系的任務。這些演算法都在`org.apache.spark.graphx.lib`，可以直接透過`Graph`中的[GraphOps](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps)來取得。這章節將會描述如何使用這些圖形演算法。
 
 ## PageRank
 
@@ -8,7 +8,8 @@ PageRank是用來衡量一個圖形中每個節點的重要程度，假設有一
 
 在GraphX中的[PageRank object](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.lib.PageRank$)實作了靜態和動態PageRank的方法。靜態的PageRank會在固定的次數內運行，而動態的PageRank則會一直運行，直到收斂。[GraphOps](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps)允許直接呼叫這些方法。
 
-GraphX內有一個範例，可以讓我們直接在社群媒體資料集上運行PageRank演算法。使用者的資料在`graphx/data/users.txt`，使用者之間的關係在`graphx/data/followers.txt`中。我們可以透過以下來計算出每個使用者的PageRank。
+GraphX內有一個範例，可以讓我們直接在社群媒體資料集上運行PageRank演算法。
+使用者的資料在`graphx/data/users.txt`，使用者之間的關係在`graphx/data/followers.txt`中。我們可以透過以下來計算出每個使用者的PageRank。
 
 ```scala
 // Load the edges as a graph
@@ -27,13 +28,12 @@ val ranksByUsername = users.join(ranks).map {
 println(ranksByUsername.collect().mkString("\n"))
 ```
 
-## 连通体算法
+## 連通分量演算法
 
-连通体算法用id标注图中每个连通体，将连通体中序号最小的顶点的id作为连通体的id。例如，在社交网络中，连通体可以近似为集群。GraphX在[ConnectedComponents object](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.lib.ConnectedComponents$)
-中包含了一个算法的实现，我们通过下面的方法计算社交网络数据集中的连通体。
+連通分量演算法利用連通分量中編號最小的節點的ID來作為其的標籤。例如，在社群媒體中，連通分量可以近似為一個群聚。在GraphX中的[ConnectedComponents object](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.lib.ConnectedComponents$)有這個演算法實作，我們可以透過下面的範例來完成。
 
 ```scala
-/ Load the graph as in the PageRank example
+// Load the graph as in the PageRank example
 val graph = GraphLoader.edgeListFile(sc, "graphx/data/followers.txt")
 // Find the connected components
 val cc = graph.connectedComponents().vertices
@@ -49,11 +49,9 @@ val ccByUsername = users.join(cc).map {
 println(ccByUsername.collect().mkString("\n"))
 ```
 
-## 三角形计数算法
+## 三角形計數演算法
 
-一个顶点有两个相邻的顶点以及相邻顶点之间的边时，这个顶点是一个三角形的一部分。GraphX在[TriangleCount object](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.lib.TriangleCount$)
-中实现了一个三角形计数算法，它计算通过每个顶点的三角形的数量。需要注意的是，在计算社交网络数据集的三角形计数时，`TriangleCount`需要边的方向是规范的方向(srcId < dstId),
-并且图通过`Graph.partitionBy`分片过。
+若一個節點有兩個相鄰的節點且和它們有邊相連，那麼這個節點就是三角形的一部分。GraphX中的[TriangleCount object](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.lib.TriangleCount$)實作了演算法，它計算通過每個節點的三角形數量，用來衡量群聚。需要注意的`TriangleCount`要求邊的方向是按照規定的方向（srcId < dstId）並且圖形是利用`Graph.partitionBy`所切開的。
 
 ```scala
 // Load the edges in canonical order and partition the graph for triangle count
