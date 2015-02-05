@@ -23,7 +23,7 @@ GraphX的目的就是將`grap-parallel`和`data-parallel`整合成一個系統�
 * [圖形特性](property-graph.md)
 * [圖形操作](graph-operators.md)
 * [Pregel API](pregel-api.md)
-* [圖形建構者](graph-builders.md)
+* [圖形建構子](graph-builders.md)
 * [節點和邊的RDDs](vertex-and-edge-rdds.md)
 * [圖形演算法](graph-algorithms.md)
 * [範例](examples.md)
