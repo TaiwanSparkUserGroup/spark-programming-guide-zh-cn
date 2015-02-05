@@ -1,6 +1,6 @@
-# [獨立應用程序](https://spark.apache.org/docs/latest/quick-start.html#self-contained-applications)
+# [獨立應用程式](https://spark.apache.org/docs/latest/quick-start.html#self-contained-applications)
 
-現在假設我们想要使用 Spark API 寫一個獨立的應用程式。我们將通過使用 Scala(用 SBT)，Java(用 Maven) 和 Python 寫一個簡單的應用程式來學習。
+現在假設我們想要使用 Spark API 寫一個獨立的應用程式。我们將通過使用 Scala(用 SBT)，Java(用 Maven) 和 Python 寫一個簡單的應用程式來學習。
 
 我们用 Scala 創建一個非常簡單的 Spark 應用程式。如此簡單，他的名字是 `SimpleApp.scala`：
 
