@@ -1,6 +1,6 @@
 # 圖形操作
 
-就像RDDs基本的操作map、filter和reduceByKey一樣，屬性圖形也有基本操作集合的指令，這些操作採用使用者自訂義的函數並產生新轉換後的特徵和結構的新圖形。在[Graph](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph)中實作了優化的核心操作。以及[GraphOps](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps)中定義的表示為核心操作組合的快捷操作。由於Scala中有隱含轉換，故`GraphOps`中的操作可以作為`Graph`的成員直接使用。例如，我們可以透過下方的例子來計算每個節點（定義在`GraphOps`）的內分支度。
+就像RDDs基本的操作map、filter和reduceByKey一樣，屬性圖形也具備基本操作集合的指令，這些操作採用使用者自訂義的函數並產生新轉換後的特徵和結構的新圖形。在[Graph](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph)中實作了優化的核心操作以及[GraphOps](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps)中定義的表示為核心操作組合的快捷操作。由於Scala中有隱含轉換，故`GraphOps`中的操作可以作為`Graph`的成員直接使用。例如，我們可以透過下方的例子來計算每個節點（定義在`GraphOps`）的內分支度。
 
 ```scala
 val graph: Graph[(String, String), String]
@@ -12,8 +12,7 @@ val inDegrees: VertexRDD[Int] = graph.inDegrees
 
 ## 操作指令清單
 
-一下是定义在`Graph`和`GraphOps`中（为了简单起见，表现为图的成员）的功能的快速浏览。注意，某些函数签名已经简化（如默认参数和类型的限制已删除），一些更高级的功能已经被
-删除，所以请参阅API文档了解官方的操作列表。
+以下一些定義在`Graph`和`GraphOps`中的函數摘要，為了簡單起見，用`Graph`的成員做表示。注意，某些函數是已經經過刪簡後的（如預設參數和型別限制皆沒有列出），還有一些較為進階的函數也沒有列出，若是希望了解更多，請閱讀官方的API文件。
 
 ```scala
 /** Summary of the functionality in the property graph */
@@ -76,9 +75,9 @@ class Graph[VD, ED] {
 }
 ```
 
-## 属性操作
+## 屬性操作
 
-如RDD的`map`操作一样，属性图包含下面的操作：
+像是RDD的`map`的操作一樣，如下列所示：
 
 ```scala
 class Graph[VD, ED] {
@@ -87,22 +86,21 @@ class Graph[VD, ED] {
   def mapTriplets[ED2](map: EdgeTriplet[VD, ED] => ED2): Graph[VD, ED2]
 }
 ```
-每个操作都产生一个新的图，这个新的图包含通过用户自定义的map操作修改后的顶点或边的属性。
+每個操作執行後都會產生一個新的圖形，其節點或邊的屬性都會經過使用者所定義的`map`操作而改變。
 
-注意，每种情况下图结构都不受影响。这些操作的一个重要特征是它允许所得图形重用原有图形的结构索引(indices)。下面的两行代码在逻辑上是等价的，但是第一个不保存结构索引，所以
-不会从GraphX系统优化中受益。
+> 注意，在經過這些操作下，是不會影響到圖形的結構。這些操作有一個重要特色，就是它會重複利用原始圖形結構的索引值。下面的兩段程式碼在目的是相同的，但是第一段並不會保存結構的索引值，這樣無法從GraphX中優化。
 
 ```scala
 val newVertices = graph.vertices.map { case (id, attr) => (id, mapUdf(id, attr)) }
 val newGraph = Graph(newVertices, graph.edges)
 ```
-另一种方法是用[mapVertices](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@mapVertices[VD2]((VertexId,VD)⇒VD2)(ClassTag[VD2]):Graph[VD2,ED])保存索引。
+> 另一種方法是透過[mapVertices](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@mapVertices[VD2]((VertexId,VD)⇒VD2)(ClassTag[VD2]):Graph[VD2,ED])來保存索引。
 
 ```scala
 val newGraph = graph.mapVertices((id, attr) => mapUdf(id, attr))
 ```
 
-这些操作经常用来初始化的图形，用作特定计算或者用来处理项目不需要的属性。例如，给定一个图，这个图的顶点特征包含出度，我们为PageRank初始化它。
+這些操作經常用來初始化作為特定計算或處理不必要的屬性的圖形。例如，給一個具有外分支度（Out-degree）屬性節點的圖形，用於PageRank。
 
 ```scala
 // Given a graph where the vertex property is the out degree
@@ -114,9 +112,9 @@ val outputGraph: Graph[Double, Double] =
   inputGraph.mapTriplets(triplet => 1.0 / triplet.srcAttr).mapVertices((id, _) => 1.0)
 ```
 
-## 结构性操作
+## 結構性的操作
 
-当前的GraphX仅仅支持一组简单的常用结构性操作。下面是基本的结构性操作列表。
+目前的GraphX只有支援一組簡單的結構性操作，我們希望未來能夠增加。下面是基本的結構性操作清單。
 
 ```scala
 class Graph[VD, ED] {
@@ -128,12 +126,9 @@ class Graph[VD, ED] {
 }
 ```
 
-[reverse](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@reverse:Graph[VD,ED])操作返回一个新的图，这个图的边的方向都是反转的。例如，这个操作可以用来计算反转的PageRank。因为反转操作没有修改顶点或者边的属性或者改变边的数量，所以我们可以
-在不移动或者复制数据的情况下有效地实现它。
+[reverse](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@reverse:Graph[VD,ED])這個操作會將會反轉圖形內所有邊的方向並回傳反轉後的圖形。例如，這個操作可以用來計算反轉後的PageRank。由於這個操作並不會修改到節點或是邊，也不會改變邊的數量，所以能夠在不搬移或複製資料的情況下有效的實現。
 
-[subgraph](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@subgraph((EdgeTriplet[VD,ED])⇒Boolean,(VertexId,VD)⇒Boolean):Graph[VD,ED])操作
-利用顶点和边的谓词（predicates），返回的图仅仅包含满足顶点谓词的顶点、满足边谓词的边以及满足顶点谓词的连接顶点（connect vertices）。`subgraph`操作可以用于很多场景，如获取
-感兴趣的顶点和边组成的图或者获取清除断开链接后的图。下面的例子删除了断开的链接。
+[subgraph](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@subgraph((EdgeTriplet[VD,ED])⇒Boolean,(VertexId,VD)⇒Boolean):Graph[VD,ED])這個操作會利用使用者給予的節點和邊的條件（predicateds），回傳的是圖形是滿足條件的節點和邊，以及滿足節點條件的相連節點。`subgraph`的操作可以在許多情況上限制有興趣的節點和邊或刪除受損的連結。下面的範例就是說明如何刪除受損的連結。
 
 ```scala
 // Create an RDD for the vertices
@@ -163,11 +158,9 @@ validGraph.triplets.map(
     triplet => triplet.srcAttr._1 + " is the " + triplet.attr + " of " + triplet.dstAttr._1
   ).collect.foreach(println(_))
 ```
+> 注意，上面的範例中，只有提供節點的條件。如果沒有給予節點或邊的條件，`subgraph`將會預設為`True`，代表不會做任何限制。
 
-注意，上面的例子中，仅仅提供了顶点谓词。如果没有提供顶点或者边的谓词，`subgraph`操作默认为true。
-
-[mask](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@mask[VD2,ED2](Graph[VD2,ED2])(ClassTag[VD2],ClassTag[ED2]):Graph[VD,ED])操作
-构造一个子图，这个子图包含输入图中包含的顶点和边。这个操作可以和`subgraph`操作相结合，基于另外一个相关图的特征去约束一个图。例如，我们可能利用缺失顶点的图运行连通体（？连通组件connected components），然后返回有效的子图。
+[mask](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@mask[VD2,ED2](Graph[VD2,ED2])(ClassTag[VD2],ClassTag[ED2]):Graph[VD,ED])操作會建造一個子圖形，這個子圖形具備輸入圖形的節點和邊。可以利用`subgraph`去限制圖形，然後將其結果作為`mask`的遮罩來限制結果。例如，我們可以先利用有遺失的節點來運行連通分量演算法，然後再結合`subgraph`及`mask`來取得正確的結果。
 
 ```scala
 / Run Connected Components
@@ -178,8 +171,7 @@ val validGraph = graph.subgraph(vpred = (id, attr) => attr._2 != "Missing")
 val validCCGraph = ccGraph.mask(validGraph)
 ```
 
-[groupEdges](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@groupEdges((ED,ED)⇒ED):Graph[VD,ED])操作合并多重图
-中的并行边(如顶点对之间重复的边)。在大量的应用程序中，并行的边可以合并（它们的权重合并）为一条边从而降低图的大小。
+[groupEdges](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@groupEdges((ED,ED)⇒ED):Graph[VD,ED])操作會合併平行的邊（如一對節點之前重複的邊）。大許多應用上，會藉由將平行的邊合併（權值合併）為一條來降低圖形的大小。
 
 ## 连接操作
 
