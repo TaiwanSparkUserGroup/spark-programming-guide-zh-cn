@@ -1,7 +1,7 @@
 # Spark GraphX
 
 ## 概觀
-GraphX是一個新的（alpha） Spark API，它用於圖形（Graph）和平行圖形（Graph-parallel）的計算。GraphX透過引入[Resilient Distributed Property Graph](property-graph.md)：一種帶有節點和邊屬性的有向多重圖，來擴展Spark RDD。為了支援圖形的運算，GraphX公開一系列基本操作（例如：subGraph、joinVertices、aggregateMessages）和Pregel API的優化。此外，GraphX也持續增加圖形演算法還有簡化分析圖形的工具（Builder）。
+GraphX是一個新的（alpha） Spark API，它用於圖形（Graph）和平行圖形（Graph-parallel）的計算。GraphX透過引入[Resilient Distributed Property Graph](property-graph.md)：一種帶有頂點和邊屬性的有向多重圖，來擴展Spark RDD。為了支援圖形的運算，GraphX公開一系列基本操作（例如：subGraph、joinVertices、aggregateMessages）和Pregel API的優化。此外，GraphX也持續增加圖形演算法還有簡化分析圖形的工具（Builder）。
 
 ## 動機
 從社群媒體到語言模型，數量和重要性不斷成長的圖形結構資料推動了許多`graph-parallel`系統（例如：Giraph和GraphLab）的發展。
@@ -24,6 +24,6 @@ GraphX的目的就是將`grap-parallel`和`data-parallel`整合成一個系統�
 * [圖形操作](graph-operators.md)
 * [Pregel API](pregel-api.md)
 * [圖形建構子](graph-builders.md)
-* [節點和邊的RDDs](vertex-and-edge-rdds.md)
+* [頂點和邊的RDDs](vertex-and-edge-rdds.md)
 * [圖形演算法](graph-algorithms.md)
 * [範例](examples.md)

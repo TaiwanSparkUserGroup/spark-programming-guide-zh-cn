@@ -1,13 +1,10 @@
-# 顶点和边RDDs
+# 頂點和邊的RDDs
 
-GraphX暴露保存在图中的顶点和边的RDD。然而，因为GraphX包含的顶点和边拥有优化的数据结构，这些数据结构提供了额外的功能。顶点和边分别返回`VertexRDD`和`EdgeRDD`。这一章
-我们将学习它们的一些有用的功能。
+GraphX揭開了儲存在圖中的頂點和邊的RDD。因為GraphX將頂點和邊保存在優化過的資料結構中，這些資料結構提供了額外的功能，分別傳回`VertexRDD`和`EdgeRDD`。這一章節，我們將學習它們一些有用的功能。
 
 ## VertexRDDs
 
-`VertexRDD[A]`继承自`RDD[(VertexID, A)]`并且添加了额外的限制，那就是每个`VertexID`只能出现一次。此外，`VertexRDD[A]`代表了一组属性类型为A的顶点。在内部，这通过
-保存顶点属性到一个可重复使用的hash-map数据结构来获得。所以，如果两个`VertexRDDs`从相同的基本`VertexRDD`获得（如通过filter或者mapValues），它们能够在固定的时间内连接
-而不需要hash评价。为了利用这个索引数据结构，`VertexRDD`暴露了一下附加的功能：
+`VertexRDD[A]`繼承`RDD[(VertexID, A)]`並且增加了額外的限制條件，那就是每個`VertexID`只能出現一次。此外，`VertexRDD[A]`代表一組具有型別A特性的頂點。在內部情況下，能透過將頂點屬性儲存到一個可重複使用的hash-map的資料結構即可達成。所以，若兩個`VertexRDDs`是從相同的`VertexRDD`(如藉由`filter`或`mapValues`)基底產生的，它們就能夠在常數時間內完成合併，而不需要透過hash的計算。為了利用索引式的資料結構，`VertexRDD`提供了下列的附加功能：
 
 ```scala
 class VertexRDD[VD] extends RDD[(VertexID, VD)] {
@@ -62,9 +59,3 @@ def innerJoin[ED2, ED3](other: EdgeRDD[ED2])(f: (VertexId, VertexId, ED, ED2) =>
 ```
 
 在大多数的应用中，我们发现，EdgeRDD操作可以通过图操作者(graph operators)或者定义在基本RDD中的操作来完成。
-
-
-
-
-
-

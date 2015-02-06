@@ -4,7 +4,7 @@ GraphX具備一系列的圖形演算法來簡化圖形分系的任務。這些�
 
 ## PageRank
 
-PageRank是用來衡量一個圖形中每個節點的重要程度，假設有一條從u到v的邊，這條邊稱為u給v的重要性指標。例如，一個Twitter使用者有許多追隨者，如此一來，可以認為這名使用者相當重要。
+PageRank是用來衡量一個圖形中每個頂點的重要程度，假設有一條從u到v的邊，這條邊稱為u給v的重要性指標。例如，一個Twitter使用者有許多追隨者，如此一來，可以認為這名使用者相當重要。
 
 在GraphX中的[PageRank object](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.lib.PageRank$)實作了靜態和動態PageRank的方法。靜態的PageRank會在固定的次數內運行，而動態的PageRank則會一直運行，直到收斂。[GraphOps](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps)允許直接呼叫這些方法。
 
@@ -30,7 +30,7 @@ println(ranksByUsername.collect().mkString("\n"))
 
 ## 連通分量演算法
 
-連通分量演算法利用連通分量中編號最小的節點的ID來作為其的標籤。例如，在社群媒體中，連通分量可以近似為一個群聚。在GraphX中的[ConnectedComponents object](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.lib.ConnectedComponents$)有這個演算法實作，我們可以透過下面的範例來完成。
+連通分量演算法利用連通分量中編號最小的頂點的ID來作為其的標籤。例如，在社群媒體中，連通分量可以近似為一個群聚。在GraphX中的[ConnectedComponents object](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.lib.ConnectedComponents$)有這個演算法實作，我們可以透過下面的範例來完成。
 
 ```scala
 // Load the graph as in the PageRank example
@@ -51,7 +51,7 @@ println(ccByUsername.collect().mkString("\n"))
 
 ## 三角形計數演算法
 
-若一個節點有兩個相鄰的節點且和它們有邊相連，那麼這個節點就是三角形的一部分。GraphX中的[TriangleCount object](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.lib.TriangleCount$)實作了演算法，它計算通過每個節點的三角形數量，用來衡量群聚。需要注意的`TriangleCount`要求邊的方向是按照規定的方向（srcId < dstId）並且圖形是利用`Graph.partitionBy`所切開的。
+若一個頂點有兩個相鄰的頂點且和它們有邊相連，那麼這個頂點就是三角形的一部分。GraphX中的[TriangleCount object](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.lib.TriangleCount$)實作了演算法，它計算通過每個頂點的三角形數量，用來衡量群聚。需要注意的`TriangleCount`要求邊的方向是按照規定的方向（srcId < dstId）並且圖形是利用`Graph.partitionBy`所切開的。
 
 ```scala
 // Load the edges in canonical order and partition the graph for triangle count
