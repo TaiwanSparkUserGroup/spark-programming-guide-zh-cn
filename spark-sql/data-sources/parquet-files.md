@@ -1,8 +1,8 @@
-# Parquet文件
+# [Parquet檔案](https://spark.apache.org/docs/latest/sql-programming-guide.html#parquet-files)
 
-Parquet是一种柱状(columnar)格式，可以被许多其它的数据处理系统支持。Spark SQL提供支持读和写Parquet文件的功能，这些文件可以自动地保留原始数据的模式。
+Parquet是一欄位(columnar)格式，可以被許多其它的資料處理系统支援。 Spark SQL 提供支援讀和寫 Parquet 檔案的功能，這些檔案可以自動地保留原始資料的模式。
 
-## 加载数据
+## 讀取資料
 
 ```scala
 // sqlContext from the previous example is used in this example.
@@ -26,12 +26,12 @@ teenagers.map(t => "Name: " + t(0)).collect().foreach(println)
 
 ## 配置
 
-可以在SQLContext上使用setConf方法配置Parquet或者在用SQL时运行`SET key=value`命令来配置Parquet。
+可以在 SQLContext 上使用 setConf 方法配置 Parquet ．或者在用 SQL 時使用 `SET key=value` 指令來配置 Parquet。
 
 Property Name | Default | Meaning
 --- | --- | ---
-spark.sql.parquet.binaryAsString | false | 一些其它的Parquet-producing系统，特别是Impala和其它版本的Spark SQL，当写出Parquet模式的时候，二进制数据和字符串之间无法区分。这个标记告诉Spark SQL将二进制数据解释为字符串来提供这些系统的兼容性。
-spark.sql.parquet.cacheMetadata | true | 打开parquet元数据的缓存，可以提高静态数据的查询速度
-spark.sql.parquet.compression.codec | gzip | 设置写parquet文件时的压缩算法，可以接受的值包括：uncompressed, snappy, gzip, lzo
-spark.sql.parquet.filterPushdown | false | 打开Parquet过滤器的pushdown优化。因为已知的Paruet错误，这个特征默认是关闭的。如果你的表不包含任何空的字符串或者二进制列，打开这个特征仍是安全的
-spark.sql.hive.convertMetastoreParquet | true | 当设置为false时，Spark SQL将使用Hive SerDe代替内置的支持
+spark.sql.parquet.binaryAsString | false | 一些其它的Parquet-producing系统，特别是Impala和其它版本的Spark SQL，當寫出 Parquet 模式的时候，二進位資料和字串之間無法分區分。這個標記告诉Spark SQL 將二進位資料解釋為字串來提供這些系统的相容性。
+spark.sql.parquet.cacheMetadata | true | 打開 parquet 中介資料的暫存，可以提高靜態數據的查詢速度
+spark.sql.parquet.compression.codec | gzip | 設置寫 parquet 文件時的壓縮算法，可以接受的值包括：uncompressed, snappy, gzip, lzo
+spark.sql.parquet.filterPushdown | false | 打開 Parquet 過濾器的 pushdown 優化。因為已知的 Paruet 錯誤，這個選項預設是關閉的。如果你的表不包含任何空的字串或者二進位的列，開啟這個選項仍是安全的
+spark.sql.hive.convertMetastoreParquet | true | 當設置為 false 時，Spark SQL 將使用 Hive SerDe 代替内建的支援
