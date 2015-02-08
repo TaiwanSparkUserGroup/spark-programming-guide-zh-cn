@@ -1,10 +1,10 @@
 # 頂點和邊的RDDs
 
-GraphX揭開了儲存在圖中的頂點和邊的RDD。因為GraphX將頂點和邊保存在優化過的資料結構中，這些資料結構提供了額外的功能，分別傳回`VertexRDD`和`EdgeRDD`。這一章節，我們將學習它們一些有用的功能。
+GraphX提供了儲存在圖中的頂點和邊的RDD。因為GraphX將頂點和邊保存在優化過的資料結構中，這些資料結構提供了額外的功能，分別傳回`VertexRDD`和`EdgeRDD`。這一章節，我們將學習它們一些有用的功能。
 
 ## VertexRDDs
 
-`VertexRDD[A]`繼承`RDD[(VertexID, A)]`並且增加了額外的限制條件，那就是每個`VertexID`只能出現一次。此外，`VertexRDD[A]`代表一組具有型別A特性的頂點。在內部情況下，能透過將頂點屬性儲存到一個可重複使用的hash-map的資料結構即可達成。所以，若兩個`VertexRDDs`是從相同的`VertexRDD`(如藉由`filter`或`mapValues`)基底產生的，它們就能夠在常數時間內完成合併，而不需要透過hash的計算。為了利用索引式的資料結構，`VertexRDD`提供了下列的附加功能：
+`VertexRDD[A]`繼承了`RDD[(VertexID, A)]`並且新增了額外的限制條件，那就是每個`VertexID`只能出現一次。此外，`VertexRDD[A]`代表一組具有型別A特性的頂點。在程式內部，透過將頂點屬性儲存到一個可重複使用的hash-map的資料結構來達成。所以，若兩個`VertexRDDs`是從相同的`VertexRDD`(如藉由`filter`或`mapValues`)基底產生的，它們就能夠在常數時間內完成合併，而避免了hash的計算。為了利用索引式的資料結構，`VertexRDD`提供了下列的附加功能：
 
 ```scala
 class VertexRDD[VD] extends RDD[(VertexID, VD)] {
@@ -23,12 +23,9 @@ class VertexRDD[VD] extends RDD[(VertexID, VD)] {
 }
 ```
 
-举个例子，`filter`操作如何返回一个VertexRDD。过滤器实际使用一个`BitSet`实现，因此它能够重用索引以及保留和其它`VertexRDDs`做连接时速度快的能力。同样的，`mapValues`操作
-不允许`map`函数改变`VertexID`，因此可以保证相同的`HashMap`数据结构能够重用。当连接两个从相同的`hashmap`获取的VertexRDDs和使用线性扫描而不是昂贵的点查找实现连接操作时，`leftJoin`
-和`innerJoin`都能够使用。
+舉例，`filter`操作是如何回一個`VertexRDD`。`filter`實際上是由`BitSet`實作，因此重複使用索引值以及保留快速與其他`VertexRDDs`合併的能力。相同的，`mapValues`不允許`map`函數改變`VertexID`，能夠保證相同的`hashMap`的資料結構被重複使用。當合併兩個從相同`hashMap`得到的`VertexRDDs`且利用線性搜尋（linear scan）而非花費時間較長的點查詢（point lookups）來實現合併時，`leftJoin`和`innerJoin`都能夠使用。
 
-从一个`RDD[(VertexID, A)]`高效地构建一个新的`VertexRDD`，`aggregateUsingIndex`操作是有用的。概念上，如果我通过一组顶点构造了一个`VertexRDD[B]`，而`VertexRDD[B]`是
-一些`RDD[(VertexID, A)]`中顶点的超集，那么我们就可以在聚合以及随后索引`RDD[(VertexID, A)]`中重用索引。例如：
+`aggregateUsingIndex`操作能夠有效率地將一個`RDD[(VertexID, A)]`建造成一個新的`VertexRDD`。概念上，我透過一組為一些`VertexRDD[A]` 的`super-set`頂點建造了`VertexRDD[B]`，那麼我們就能夠在聚合（aggregate）和往後查詢`RDD[(VertexID, A)]`時重複使用索引。例如：
 
 ```scala
 val setA: VertexRDD[Int] = VertexRDD(sc.parallelize(0L until 100L).map(id => (id, 1)))
@@ -44,10 +41,9 @@ val setC: VertexRDD[Double] = setA.innerJoin(setB)((id, a, b) => a + b)
 
 ## EdgeRDDs
 
-`EdgeRDD[ED]`继承自`RDD[Edge[ED]]`，使用定义在[PartitionStrategy](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.PartitionStrategy)的
-各种分区策略中的一个在块分区中组织边。在每个分区中，边属性和相邻结构被分别保存，当属性值改变时，它们可以最大化的重用。
+`EdgeRDD[ED]`繼承了`RDD[Edge[ED]]`，使用定義在[PartitionStrategy](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.PartitionStrategy)眾多分割方法其中一種，將邊作區塊性的分割。在每個分區中，邊的屬性和周遭結構會被個別的儲存，能夠在屬性改變時，最大化重用。
 
-`EdgeRDD`暴露了三个额外的函数
+`EdgeRDD`揭示了三個額外的函數：
 
 ```scala
 // Transform the edge attributes while preserving the structure
@@ -58,4 +54,4 @@ def reverse: EdgeRDD[ED]
 def innerJoin[ED2, ED3](other: EdgeRDD[ED2])(f: (VertexId, VertexId, ED, ED2) => ED3): EdgeRDD[ED3]
 ```
 
-在大多数的应用中，我们发现，EdgeRDD操作可以通过图操作者(graph operators)或者定义在基本RDD中的操作来完成。
+在多數的應用中，我們會發現`EdgeRDD`的操作可以透過圖形操作子（graph operators）或是定義在基本RDD中的操作來完成。

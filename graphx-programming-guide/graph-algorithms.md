@@ -1,6 +1,6 @@
 # 圖形演算法
 
-GraphX具備一系列的圖形演算法來簡化圖形分系的任務。這些演算法都在`org.apache.spark.graphx.lib`，可以直接透過`Graph`中的[GraphOps](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps)來取得。這章節將會描述如何使用這些圖形演算法。
+GraphX具備一系列的圖形演算法來簡化圖形分析的任務。這些演算法都在`org.apache.spark.graphx.lib`，可以直接透過`Graph`中的[GraphOps](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps)來取得。這章節將會描述如何使用這些圖形演算法。
 
 ## PageRank
 
