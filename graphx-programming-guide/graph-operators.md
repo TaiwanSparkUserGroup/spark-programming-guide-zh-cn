@@ -1,6 +1,6 @@
 # 圖形操作
 
-就像RDDs基本的操作map、filter和reduceByKey一樣，屬性圖形也具備基本操作集合的指令，這些操作採用使用者自訂義的函數並產生新轉換後的特徵和結構的新圖形。在[Graph](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph)中實作了優化的核心操作以及[GraphOps](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps)中定義的表示為核心操作組合的快捷操作。由於Scala中有隱含轉換，故`GraphOps`中的操作可以作為`Graph`的成員直接使用。例如，我們可以透過下方的例子來計算每個頂點（定義在`GraphOps`）的內分支度。
+就像RDDs基本的操作map、filter和reduceByKey一樣，屬性圖形也具備一些基本的運算子，這些運算子採用使用者自訂義的函數並產生新轉換後的特徵和結構的新圖形。在[Graph](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph)中實作了優化後的核心運算子以及[GraphOps](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps)中定義的表示為核心運算子組合的快捷運算子。由於Scala中有隱式轉換，故`GraphOps`中的運算子可以作為`Graph`的成員直接使用。例如，我們可以透過下方的例子來計算每個頂點（定義在`GraphOps`）的內分支度。
 
 ```scala
 val graph: Graph[(String, String), String]
@@ -10,7 +10,7 @@ val inDegrees: VertexRDD[Int] = graph.inDegrees
 
 區分核心圖形操作和`GraphOps`的原因是為了能在未來支援不同的圖形表示。每個圖形表示都必須提供核心操作的實作和重複使用定義在`GraphOps`中有用的操作。
 
-## 操作指令清單
+## 運算子清單
 
 以下一些定義在`Graph`和`GraphOps`中的函數摘要，為了簡單起見，用`Graph`的成員做表示。注意，某些函數是已經經過刪簡後的（如預設參數和型別限制皆沒有列出），還有一些較為進階的函數也沒有列出，若是希望了解更多，請閱讀官方的API文件。
 
@@ -75,9 +75,9 @@ class Graph[VD, ED] {
 }
 ```
 
-## 屬性操作
+## 屬性運算子
 
-像是RDD的`map`的操作一樣，如下列所示：
+像是RDD的`map`運算子一樣，如下列所示：
 
 ```scala
 class Graph[VD, ED] {
@@ -86,9 +86,9 @@ class Graph[VD, ED] {
   def mapTriplets[ED2](map: EdgeTriplet[VD, ED] => ED2): Graph[VD, ED2]
 }
 ```
-每個操作執行後都會產生一個新的圖形，其頂點或邊的屬性都會經過使用者所定義的`map`操作而改變。
+每個運算子執行後都會產生一個新的圖形，其頂點或邊的屬性都會經過使用者所定義的`map`函數而改變。
 
-> 注意，在經過這些操作下，是不會影響到圖形的結構。這些操作有一個重要特色，就是它會重複利用原始圖形結構的索引值。下面的兩段程式碼在目的是相同的，但是第一段並不會保存結構的索引值，這樣無法從GraphX中優化。
+> 注意，在經過這些操作下，是不會影響到圖形的結構。這些運算子有一個重要特色，就是它會重複利用原始圖形結構的索引值。下面的兩段程式碼目的上是相同的，但是第一段並不會保存結構的索引值，這樣將無法讓GraphX系統優化。
 
 > ```scala
 val newVertices = graph.vertices.map { case (id, attr) => (id, mapUdf(id, attr)) }
@@ -100,7 +100,7 @@ val newGraph = Graph(newVertices, graph.edges)
 val newGraph = graph.mapVertices((id, attr) => mapUdf(id, attr))
 ```
 
-這些操作經常用來初始化作為特定計算或處理不必要的屬性的圖形。例如，給一個具有外分支度（Out-degree）屬性頂點的圖形，用於PageRank。
+這些運算子經常用來初始化作為特定計算或處理不必要的屬性的圖形。例如，給一個具有外分支度（Out-degree）屬性頂點的圖形，用於PageRank。
 
 ```scala
 // Given a graph where the vertex property is the out degree
@@ -112,9 +112,9 @@ val outputGraph: Graph[Double, Double] =
   inputGraph.mapTriplets(triplet => 1.0 / triplet.srcAttr).mapVertices((id, _) => 1.0)
 ```
 
-## 結構性的操作
+## 結構性運算子
 
-目前的GraphX只有支援一組簡單的結構性操作，我們希望未來能夠增加。下面列出了基本的結構性操作。
+目前的GraphX只有支援一組簡單的結構性運算子，我們希望未來能夠增加。下面列出了基本的結構性運算子。
 
 ```scala
 class Graph[VD, ED] {
@@ -126,9 +126,9 @@ class Graph[VD, ED] {
 }
 ```
 
-[reverse](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@reverse:Graph[VD,ED])：此操作將會反轉圖形內所有邊的方向並回傳反轉後的圖形。例如，這個操作可以用來計算反轉後的PageRank。由於這個操作並不會修改到頂點或是邊，也不會改變邊的數量，所以能夠在不搬移或複製資料的情況下有效率地實現。
+[reverse](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@reverse:Graph[VD,ED])：此運算子將會反轉圖形內所有邊的方向並回傳反轉後的圖形。例如，這個操作可以用來計算反轉後的PageRank。由於這個操作並不會修改到頂點或是邊，也不會改變邊的數量，所以能夠在不搬移或複製資料的情況下有效率地實現。
 
-[subgraph](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@subgraph((EdgeTriplet[VD,ED])⇒Boolean,(VertexId,VD)⇒Boolean):Graph[VD,ED])：此操作會利用使用者給予的頂點和邊的條件（predicateds），回傳的是圖形是滿足條件的頂點和邊，以及滿足頂點條件的相連頂點。`subgraph`的操作可以在許多情況上限制有興趣的頂點和邊或刪除受損的連結。下面的範例就是說明如何刪除受損的連結。
+[subgraph](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@subgraph((EdgeTriplet[VD,ED])⇒Boolean,(VertexId,VD)⇒Boolean):Graph[VD,ED])：此運算子會利用使用者給予的頂點和邊的條件（predicateds），回傳的是圖形是滿足條件的頂點和邊，以及滿足頂點條件的相連頂點。`subgraph`運算子可以在許多情況上限制有興趣的頂點和邊或刪除受損的連結。下面的範例就是說明如何刪除受損的連結。
 
 ```scala
 // Create an RDD for the vertices
@@ -158,9 +158,9 @@ validGraph.triplets.map(
     triplet => triplet.srcAttr._1 + " is the " + triplet.attr + " of " + triplet.dstAttr._1
   ).collect.foreach(println(_))
 ```
-> 注意，上面的範例中，只有提供頂點的條件。如果沒有給予頂點或邊的條件，`subgraph`將會預設為`True`，代表不會做任何限制。
+> 注意，上面的範例中，只有提供頂點的條件。如果沒有給予頂點或邊的條件，`subgraph`運算子預設為`True`，代表不會做任何限制。
 
-[mask](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@mask[VD2,ED2](Graph[VD2,ED2])(ClassTag[VD2],ClassTag[ED2]):Graph[VD,ED])：此操作會建造一個子圖形，這個子圖形具備輸入圖形的頂點和邊。可以利用`subgraph`去限制圖形，然後將其結果作為`mask`的遮罩來限制結果。例如，我們可以先利用有遺失的頂點來運行連通分量演算法，然後再結合`subgraph`及`mask`來取得正確的結果。
+[mask](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@mask[VD2,ED2](Graph[VD2,ED2])(ClassTag[VD2],ClassTag[ED2]):Graph[VD,ED])：此運算子會建造一個子圖形，這個子圖形具備輸入圖形的頂點和邊。可以利用`subgraph`運算子限制圖形，然後將其結果作為`mask`的遮罩來限制結果。例如，我們可以先利用有遺失的頂點來運行連通分量演算法，然後再結合`subgraph`及`mask`來取得正確的結果。
 
 ```scala
 / Run Connected Components
@@ -171,11 +171,11 @@ val validGraph = graph.subgraph(vpred = (id, attr) => attr._2 != "Missing")
 val validCCGraph = ccGraph.mask(validGraph)
 ```
 
-[groupEdges](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@groupEdges((ED,ED)⇒ED):Graph[VD,ED])：此操作會合併平行的邊（如一對頂點之前重複的邊）。在許多應用上，會藉由將平行的邊合併（權值合併）為一條來降低圖形的大小。
+[groupEdges](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@groupEdges((ED,ED)⇒ED):Graph[VD,ED])：此運算子會合併平行的邊（如一對頂點之前重複的邊）。在許多應用上，會藉由將平行的邊合併（權值合併）為一條來降低圖形的大小。
 
-## 連結操作
+## Join運算子
 
-在許多情況下，必須將外部的資料夾入到圖中。例如，我們可能會想將額外的使用者資訊加入到現有的圖中或是想從一個圖中取出資訊加到另一個圖中。這些任務都可以藉由join來完成。以下列出join主要的操作。
+在許多情況下，必須將外部的資料合併到圖中。例如，我們可能會想將額外的使用者資訊合併到現有的圖中或是想從一個圖中取出資訊加到另一個圖中。這些任務都可以藉由`join`運算子來完成。以下列出`join`運算子主要的功能。
 
 ```scala
 class Graph[VD, ED] {
@@ -186,7 +186,7 @@ class Graph[VD, ED] {
 }
 ```
 
-[joinVertices](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps@joinVertices[U](RDD[(VertexId,U)])((VertexId,VD,U)⇒VD)(ClassTag[U]):Graph[VD,ED])：此操作會將輸入的RDD和頂點作結合，回傳一個透過使用者定義的`map`函數所轉換後的頂點的圖。若頂點沒有匹配值則會保留其原始值。
+[joinVertices](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps@joinVertices[U](RDD[(VertexId,U)])((VertexId,VD,U)⇒VD)(ClassTag[U]):Graph[VD,ED])：此運算子會將輸入的RDD和頂點作結合，回傳一個透過使用者定義的`map`函數所轉換後的頂點的圖。若頂點沒有匹配值則會保留其原始值。
 
 > 注意，
 注意，对于给定的顶点，如果RDD中有超过1个的匹配值，则仅仅使用其中的一个。建议用下面的方法保证输入RDD的唯一性。下面的方法也会预索引返回的值用以加快后续的join操作。

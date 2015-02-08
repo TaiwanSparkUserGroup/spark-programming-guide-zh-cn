@@ -23,9 +23,9 @@ class VertexRDD[VD] extends RDD[(VertexID, VD)] {
 }
 ```
 
-舉例，`filter`操作是如何回一個`VertexRDD`。`filter`實際上是由`BitSet`實作，因此重複使用索引值以及保留快速與其他`VertexRDDs`合併的能力。相同的，`mapValues`不允許`map`函數改變`VertexID`，能夠保證相同的`hashMap`的資料結構被重複使用。當合併兩個從相同`hashMap`得到的`VertexRDDs`且利用線性搜尋（linear scan）而非花費時間較長的點查詢（point lookups）來實現合併時，`leftJoin`和`innerJoin`都能夠使用。
+舉例，`filter`運算子是如何回一個`VertexRDD`。`filter`實際上是由`BitSet`實作，因此重複使用索引值以及保留快速與其他`VertexRDDs`合併的能力。相同的，`mapValues`運算子不允許`map`函數改變`VertexID`，確保相同的`hashMap`的資料結構被重複使用。當合併兩個從相同`hashMap`得到的`VertexRDDs`且利用線性搜尋（linear scan）而非花費時間較長的點查詢（point lookups）來實現合併時，`leftJoin`和`innerJoin`都能夠使用。
 
-`aggregateUsingIndex`操作能夠有效率地將一個`RDD[(VertexID, A)]`建造成一個新的`VertexRDD`。概念上，我透過一組為一些`VertexRDD[A]` 的`super-set`頂點建造了`VertexRDD[B]`，那麼我們就能夠在聚合（aggregate）和往後查詢`RDD[(VertexID, A)]`時重複使用索引。例如：
+`aggregateUsingIndex`運算子能夠有效率地將一個`RDD[(VertexID, A)]`建造成一個新的`VertexRDD`。概念上，我透過一組為一些`VertexRDD[A]` 的`super-set`頂點建造了`VertexRDD[B]`，那麼我們就能夠在聚合（aggregate）和往後查詢`RDD[(VertexID, A)]`時重複使用索引。例如：
 
 ```scala
 val setA: VertexRDD[Int] = VertexRDD(sc.parallelize(0L until 100L).map(id => (id, 1)))
@@ -54,4 +54,6 @@ def reverse: EdgeRDD[ED]
 def innerJoin[ED2, ED3](other: EdgeRDD[ED2])(f: (VertexId, VertexId, ED, ED2) => ED3): EdgeRDD[ED3]
 ```
 
-在多數的應用中，我們會發現`EdgeRDD`的操作可以透過圖形操作子（graph operators）或是定義在基本RDD中的操作來完成。
+在多數的應用中，我們會發現`EdgeRDD`的操作可以透過圖形運算子（graph operators）或是定義在基本RDD中的操作來完成。
+
+## Optimized Representation
