@@ -7,7 +7,7 @@
     - LongType：代表8個位元的整数。範圍是-9223372036854775808到9223372036854775807
     - FloatType：代表4位元的單精度浮點數
     - DoubleType：代表8位元的雙精度浮點數
-    - DecimalType：代表任意精度的10進位資料。透過内部的java.math.BigDecimal支援。BigDecimal由一個任意精度的不定長度(unscaled value)的整數和一個32位元整数组成
+    - DecimalType：代表任意精度的10進位資料。透過内部的java.math.BigDecimal支援。BigDecimal由一個任意精度的不定長度(unscaled value)的整數和一個32位元整數组成
     - StringType：代表一個字串
     - BinaryType：代表個byte序列值
     - BooleanType：代表boolean值
