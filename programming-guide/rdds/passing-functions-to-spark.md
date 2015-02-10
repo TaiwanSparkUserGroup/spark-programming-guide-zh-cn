@@ -2,7 +2,7 @@
 
 Spark 的 API 大多數是依靠在驅動程式裡傳遞函數到集群上運作，目前有兩種推薦方式：
 
-- [ 匿名函數  (Anonymous function syntax)](http://docs.scala-lang.org/tutorials/tour/anonymous-function-syntax.html)，可在較短的程式碼中使永。
+- [ 匿名函數  (Anonymous function syntax)](http://docs.scala-lang.org/tutorials/tour/anonymous-function-syntax.html)，可在較短的程式碼中使用。
 - 全局單例物件裡的靜態方法。例如，定義 `object MyFunctions` 然後傳遞 `MyFounctions.func1`，例如：
 
 ```scala
