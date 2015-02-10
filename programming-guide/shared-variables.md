@@ -49,7 +49,7 @@ scala> accum.value
 
 這個例子利用內建的整數類型累加器，開發者還可以利用[AccumulatorParam](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.AccumulatorParam) 建立自己的累加器。
 
-AccumulatorParam 接口有兩個方法：`zero`方法替你的資料類型提供一個“0 值” ( zero value )；`addInPlace`方法計算兩個值的和。例如，我们有一個`Vector`類代表數學向量，累加器可以透過下列方式進行定義：
+AccumulatorParam 接口有兩個方法：`zero`方法替你的資料類型提供一個“0 值” ( zero value )；`addInPlace`方法計算兩個值的和。例如，我们有一個`Vector`物件代表數學向量，累加器可以透過下列方式進行定義：
 
 ```scala
 object VectorAccumulatorParam extends AccumulatorParam[Vector] {
@@ -64,4 +64,4 @@ object VectorAccumulatorParam extends AccumulatorParam[Vector] {
 val vecAccum = sc.accumulator(new Vector(...))(VectorAccumulatorParam)
 ```
 
-在scala 中，Spark 支援一般[Accumulable](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.Accumulable) 接口來累計數值-結果類型和用於累加的元素類型不同( 例如收集的元素建立列表)。Spark 支援`SparkContext.accumulableCollection` 方法累家一般的scala 集合。
+在scala 中，Spark 支援一般[Accumulable](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.Accumulable) 接口來累計數值-結果類型和用於累加的元素類型不同( 例如收集的元素建立列表)。Spark 支援`SparkContext.accumulableCollection` 方法累加一般的scala 集合。
