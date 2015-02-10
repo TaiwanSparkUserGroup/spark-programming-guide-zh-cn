@@ -2,7 +2,7 @@
 =============================
 
 ## 貢獻方式
-請有意願加入的同好參考（https://github.com/TaiwanSparkUserGroup/spark-programming-guide-zh-tw/blob/master/CONTRIBUTING.rst）
+請有意願加入的同好參考(https://github.com/TaiwanSparkUserGroup/spark-programming-guide-zh-tw/blob/master/CONTRIBUTING.rst)
 
 ## 大綱
 
