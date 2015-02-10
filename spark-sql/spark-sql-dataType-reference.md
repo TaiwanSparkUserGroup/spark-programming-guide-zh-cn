@@ -1,10 +1,10 @@
 # [Spark SQL資料類型](https://spark.apache.org/docs/latest/sql-programming-guide.html#spark-sql-datatype-reference)
 
 - 數字類型
-    - ByteType：代表一個位元的整数。範圍是-128到127
-    - ShortType：代表兩個位元的整数。範圍是-32768到32767
-    - IntegerType：代表4個位元的整数。範圍是-2147483648到2147483647
-    - LongType：代表8個位元的整数。範圍是-9223372036854775808到9223372036854775807
+    - ByteType：代表一個位元的整數。範圍是-128到127
+    - ShortType：代表兩個位元的整數。範圍是-32768到32767
+    - IntegerType：代表4個位元的整數。範圍是-2147483648到2147483647
+    - LongType：代表8個位元的整數。範圍是-9223372036854775808到9223372036854775807
     - FloatType：代表4位元的單精度浮點數
     - DoubleType：代表8位元的雙精度浮點數
     - DecimalType：代表任意精度的10進位資料。透過内部的java.math.BigDecimal支援。BigDecimal由一個任意精度的不定長度(unscaled value)的整數和一個32位元整數组成
