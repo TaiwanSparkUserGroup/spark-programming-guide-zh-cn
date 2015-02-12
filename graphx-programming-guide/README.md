@@ -1,30 +1,29 @@
-# GraphX编程指南
+# Spark GraphX
 
-GraphX是一个新的（alpha）Spark API，它用于图和并行图(graph-parallel)的计算。GraphX通过引入[Resilient Distributed Property Graph](property-graph.md)：带有
-顶点和边属性的有向多重图，来扩展Spark RDD。为了支持图计算，GraphX公开一组基本的功能操作以及Pregel API的一个优化。另外，GraphX包含了一个日益增长的图算法和图builders的
-集合，用以简化图分析任务。
+## 概觀
+GraphX是一個新的（alpha） Spark API，它用於圖形（Graph）和平行圖形（Graph-parallel）的計算。GraphX透過引入[Resilient Distributed Property Graph](property-graph.md)：一種帶有頂點和邊屬性的有向多重圖，來擴展Spark RDD。為了支援圖形的運算，GraphX公開一系列基本運算子（例如：subGraph、joinVertices、aggregateMessages）和Pregel API的優化。此外，GraphX也持續增加圖形演算法還有簡化分析圖形的工具（Builder）。
 
-从社交网络到语言建模，不断增长的规模和图形数据的重要性已经推动了许多新的`graph-parallel`系统（如[Giraph](http://giraph.apache.org/)和[GraphLab](http://graphlab.org/)）的发展。
-通过限制可表达的计算类型和引入新的技术来划分和分配图，这些系统可以高效地执行复杂的图形算法，比一般的`data-parallel`系统快很多。
+## 動機
+從社群媒體到語言模型，數量和重要性不斷成長的圖形結構資料推動了許多`graph-parallel`系統（例如：Giraph和GraphLab）的發展。
+藉由限制可表示的運算型別和帶入新的技術來劃分和分配圖形，這些系統能夠有效率地執行複雜的圖形演算法，比一般的`data-parallel`的系統快很多。
 
 ![data parallel vs graph parallel](../img/data_parallel_vs_graph_parallel.png)
 
-然而，通过这种限制可以提高性能，但是很难表示典型的图分析途径（构造图、修改它的结构或者表示跨多个图的计算）中很多重要的stages。另外，我们如何看待数据取决于我们的目标，并且同一原始数据可能有许多不同表和图的视图。
+然而，透過這種限制可以大量的提高效能，但是很難表現典型圖形分析流程：建構圖形、修改結構或是表達橫跨多個圖形的運算中很多的重要階段。另外，如何看待資料取決於我們的目標，且相同的原始資料可能有許多不同的表格和圖形。
 
-![表和图](../img/tables_and_graphs.png)
+![Table and graph](../img/tables_and_graphs.png)
 
-结论是，图和表之间经常需要能够相互移动。然而，现有的图分析管道必须组成`graph-parallel`和`data- parallel`系统`，从而实现大数据的迁移和复制并生成一个复杂的编程模型。
+總結來講，圖形和表格之間經常需要夠夠互相轉換。然而，現存的圖形分析流程必須撰寫`graph-parallel`和`data- parallel`系統，導致大量資料的搬移和重複還有複雜的程式模型。
 
-![图分析路径](../img/graph_analytics_pipeline.png)
+![Graph analytics pipeline](../img/graph_analytics_pipeline.png)
 
-GraphX项目的目的就是将`graph-parallel`和`data-parallel`统一到一个系统中，这个系统拥有一个唯一的组合API。GraphX允许用户将数据当做一个图和一个集合（RDD），而不需要
-而不需要数据移动或者复杂。通过将最新的进展整合进`graph-parallel`系统，GraphX能够优化图操作的执行。
+GraphX的目的就是將`grap-parallel`和`data-parallel`整合成一個系統中，而且只有一個整合後的API。GraphX允許使用者將資料視為一個圖形和集合（RDDs），而不需要任何的資料搬移和複製。最新的`graph-parallel`系統，使得GraphX能夠優化圖形指令的執行。
 
-* [开始](getting-started.md)
-* [属性图](property-graph.md)
-* [图操作符](graph-operators.md)
+* [入門](getting-started.md)
+* [圖形特性](property-graph.md)
+* [圖形運算子](graph-operators.md)
 * [Pregel API](pregel-api.md)
-* [图构造者](graph-builders.md)
-* [顶点和边RDDs](vertex-and-edge-rdds.md)
-* [图算法](graph-algorithms.md)
-* [例子](examples.md)
+* [圖形建構式](graph-builders.md)
+* [頂點和邊的RDDs](vertex-and-edge-rdds.md)
+* [圖形演算法](graph-algorithms.md)
+* [範例](examples.md)

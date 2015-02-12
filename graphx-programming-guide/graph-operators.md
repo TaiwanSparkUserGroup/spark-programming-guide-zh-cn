@@ -1,8 +1,6 @@
-# 图操作符
+# 圖形操作（Graph Operators）
 
-正如RDDs有基本的操作map, filter和reduceByKey一样，属性图也有基本的集合操作，这些操作采用用户自定义的函数并产生包含转换特征和结构的新图。定义在[Graph](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph)中的
-核心操作是经过优化的实现。表示为核心操作的组合的便捷操作定义在[GraphOps](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps)中。然而，
-因为有Scala的隐式转换，定义在`GraphOps`中的操作可以作为`Graph`的成员自动使用。例如，我们可以通过下面的方式计算每个顶点(定义在GraphOps中)的入度。
+就像RDDs基本的操作map、filter和reduceByKey一樣，屬性圖形也具備一些基本的運算子，這些運算子採用使用者自訂義的函數並產生新轉換後的特徵和結構的新圖形。在[Graph](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph)中實作了優化後的核心運算子以及[GraphOps](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps)中定義的表示為核心運算子組合的快捷運算子。由於Scala中有隱式轉換，故`GraphOps`中的運算子可以作為`Graph`的成員直接使用。例如，我們可以透過下方的例子來計算每個頂點（定義在`GraphOps`）的內分支度。
 
 ```scala
 val graph: Graph[(String, String), String]
@@ -10,12 +8,11 @@ val graph: Graph[(String, String), String]
 val inDegrees: VertexRDD[Int] = graph.inDegrees
 ```
 
-区分核心图操作和`GraphOps`的原因是为了在将来支持不同的图表示。每个图表示都必须提供核心操作的实现并重用很多定义在`GraphOps`中的有用操作。
+區分核心圖形操作和`GraphOps`的原因是為了能在未來支援不同的圖形表示。每個圖形表示都必須提供核心操作的實作和重複使用定義在`GraphOps`中有用的操作。
 
-## 操作一览
+## 運算子的摘要清單（Summary List Of Operators）
 
-一下是定义在`Graph`和`GraphOps`中（为了简单起见，表现为图的成员）的功能的快速浏览。注意，某些函数签名已经简化（如默认参数和类型的限制已删除），一些更高级的功能已经被
-删除，所以请参阅API文档了解官方的操作列表。
+以下一些定義在`Graph`和`GraphOps`中的函數摘要，為了簡單起見，用`Graph`的成員做表示。注意，某些函數是已經經過刪簡後的（如預設參數和型別限制皆沒有列出），還有一些較為進階的函數也沒有列出，若是希望了解更多，請閱讀官方的API文件。
 
 ```scala
 /** Summary of the functionality in the property graph */
@@ -78,9 +75,9 @@ class Graph[VD, ED] {
 }
 ```
 
-## 属性操作
+# 屬性運算子（Property Operators）
 
-如RDD的`map`操作一样，属性图包含下面的操作：
+像是RDD的`map`運算子一樣，如下列所示：
 
 ```scala
 class Graph[VD, ED] {
@@ -89,22 +86,21 @@ class Graph[VD, ED] {
   def mapTriplets[ED2](map: EdgeTriplet[VD, ED] => ED2): Graph[VD, ED2]
 }
 ```
-每个操作都产生一个新的图，这个新的图包含通过用户自定义的map操作修改后的顶点或边的属性。
+每個運算子執行後都會產生一個新的圖形，其頂點或邊的屬性都會經過使用者所定義的`map`函數而改變。
 
-注意，每种情况下图结构都不受影响。这些操作的一个重要特征是它允许所得图形重用原有图形的结构索引(indices)。下面的两行代码在逻辑上是等价的，但是第一个不保存结构索引，所以
-不会从GraphX系统优化中受益。
+> 注意，在經過這些操作下，是不會影響到圖形的結構。這些運算子有一個重要特色，就是它會重複利用原始圖形結構的索引值。下面的兩段程式碼目的上是相同的，但是第一段並不會保存結構的索引值，這樣將無法讓GraphX系統優化。
 
-```scala
+> ```scala
 val newVertices = graph.vertices.map { case (id, attr) => (id, mapUdf(id, attr)) }
 val newGraph = Graph(newVertices, graph.edges)
 ```
-另一种方法是用[mapVertices](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@mapVertices[VD2]((VertexId,VD)⇒VD2)(ClassTag[VD2]):Graph[VD2,ED])保存索引。
+> 另一種方法是透過[mapVertices](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@mapVertices[VD2]((VertexId,VD)⇒VD2)(ClassTag[VD2]):Graph[VD2,ED])來保存索引。
 
-```scala
+> ```scala
 val newGraph = graph.mapVertices((id, attr) => mapUdf(id, attr))
 ```
 
-这些操作经常用来初始化的图形，用作特定计算或者用来处理项目不需要的属性。例如，给定一个图，这个图的顶点特征包含出度，我们为PageRank初始化它。
+這些運算子經常用來初始化作為特定計算或處理不必要的屬性的圖形。例如，給一個具有外分支度（Out-degree）屬性頂點的圖形，用於PageRank。
 
 ```scala
 // Given a graph where the vertex property is the out degree
@@ -116,9 +112,9 @@ val outputGraph: Graph[Double, Double] =
   inputGraph.mapTriplets(triplet => 1.0 / triplet.srcAttr).mapVertices((id, _) => 1.0)
 ```
 
-## 结构性操作
+# 結構性運算子（Structural Operators）
 
-当前的GraphX仅仅支持一组简单的常用结构性操作。下面是基本的结构性操作列表。
+目前的GraphX只有支援一組簡單的結構性運算子，我們希望未來能夠增加。下面列出了基本的結構性運算子。
 
 ```scala
 class Graph[VD, ED] {
@@ -130,12 +126,9 @@ class Graph[VD, ED] {
 }
 ```
 
-[reverse](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@reverse:Graph[VD,ED])操作返回一个新的图，这个图的边的方向都是反转的。例如，这个操作可以用来计算反转的PageRank。因为反转操作没有修改顶点或者边的属性或者改变边的数量，所以我们可以
-在不移动或者复制数据的情况下有效地实现它。
+[reverse](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@reverse:Graph[VD,ED])：此運算子將會反轉圖形內所有邊的方向並回傳反轉後的圖形。例如，這個操作可以用來計算反轉後的PageRank。由於這個操作並不會修改到頂點或是邊，也不會改變邊的數量，所以能夠在不搬移或複製資料的情況下有效率地實現。
 
-[subgraph](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@subgraph((EdgeTriplet[VD,ED])⇒Boolean,(VertexId,VD)⇒Boolean):Graph[VD,ED])操作
-利用顶点和边的谓词（predicates），返回的图仅仅包含满足顶点谓词的顶点、满足边谓词的边以及满足顶点谓词的连接顶点（connect vertices）。`subgraph`操作可以用于很多场景，如获取
-感兴趣的顶点和边组成的图或者获取清除断开链接后的图。下面的例子删除了断开的链接。
+[subgraph](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@subgraph((EdgeTriplet[VD,ED])⇒Boolean,(VertexId,VD)⇒Boolean):Graph[VD,ED])：此運算子會利用使用者給予的頂點和邊的條件（predicateds），回傳的是圖形是滿足條件的頂點和邊，以及滿足頂點條件的相連頂點。`subgraph`運算子可以在許多情況上限制有興趣的頂點和邊或刪除受損的連結。下面的範例就是說明如何刪除受損的連結。
 
 ```scala
 // Create an RDD for the vertices
@@ -165,11 +158,9 @@ validGraph.triplets.map(
     triplet => triplet.srcAttr._1 + " is the " + triplet.attr + " of " + triplet.dstAttr._1
   ).collect.foreach(println(_))
 ```
+> 注意，上面的範例中，只有提供頂點的條件。如果沒有給予頂點或邊的條件，`subgraph`運算子預設為`True`，代表不會做任何限制。
 
-注意，上面的例子中，仅仅提供了顶点谓词。如果没有提供顶点或者边的谓词，`subgraph`操作默认为true。
-
-[mask](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@mask[VD2,ED2](Graph[VD2,ED2])(ClassTag[VD2],ClassTag[ED2]):Graph[VD,ED])操作
-构造一个子图，这个子图包含输入图中包含的顶点和边。这个操作可以和`subgraph`操作相结合，基于另外一个相关图的特征去约束一个图。例如，我们可能利用缺失顶点的图运行连通体（？连通组件connected components），然后返回有效的子图。
+[mask](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@mask[VD2,ED2](Graph[VD2,ED2])(ClassTag[VD2],ClassTag[ED2]):Graph[VD,ED])：此運算子會建造一個子圖形，這個子圖形具備輸入圖形的頂點和邊。可以利用`subgraph`運算子限制圖形，然後將其結果作為`mask`的遮罩來限制結果。例如，我們可以先利用有遺失的頂點來運行連通分量演算法，然後再結合`subgraph`及`mask`來取得正確的結果。
 
 ```scala
 / Run Connected Components
@@ -180,13 +171,11 @@ val validGraph = graph.subgraph(vpred = (id, attr) => attr._2 != "Missing")
 val validCCGraph = ccGraph.mask(validGraph)
 ```
 
-[groupEdges](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@groupEdges((ED,ED)⇒ED):Graph[VD,ED])操作合并多重图
-中的并行边(如顶点对之间重复的边)。在大量的应用程序中，并行的边可以合并（它们的权重合并）为一条边从而降低图的大小。
+[groupEdges](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@groupEdges((ED,ED)⇒ED):Graph[VD,ED])：此運算子會合併平行的邊（如一對頂點之前重複的邊）。在許多應用上，會藉由將平行的邊合併（權值合併）為一條來降低圖形的大小。
 
-## 连接操作
+# Join運算子（Join Operators）
 
-在许多情况下，有必要将外部数据加入到图中。例如，我们可能有额外的用户属性需要合并到已有的图中或者我们可能想从一个图中取出顶点特征加入到另外一个图中。这些任务可以用join操作完成。
-下面列出的是主要的join操作。
+在許多情況下，必須將外部的資料合併到圖中。例如，我們可能會想將額外的使用者資訊合併到現有的圖中或是想從一個圖中取出資訊加到另一個圖中。這些任務都可以藉由`join`運算子來完成。以下列出`join`運算子主要的功能。
 
 ```scala
 class Graph[VD, ED] {
@@ -197,10 +186,9 @@ class Graph[VD, ED] {
 }
 ```
 
-[joinVertices](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps@joinVertices[U](RDD[(VertexId,U)])((VertexId,VD,U)⇒VD)(ClassTag[U]):Graph[VD,ED])
-操作将输入RDD和顶点相结合，返回一个新的带有顶点特征的图。这些特征是通过在连接顶点的结果上使用用户定义的`map`函数获得的。在RDD中没有匹配值的顶点保留其原始值。
+[joinVertices](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps@joinVertices[U](RDD[(VertexId,U)])((VertexId,VD,U)⇒VD)(ClassTag[U]):Graph[VD,ED])：此運算子會將輸入的RDD和頂點作結合，回傳一個透過使用者定義的`map`函數所轉換後的頂點的圖。若頂點沒有匹配值則會保留其原始值。
 
-注意，对于给定的顶点，如果RDD中有超过1个的匹配值，则仅仅使用其中的一个。建议用下面的方法保证输入RDD的唯一性。下面的方法也会预索引返回的值用以加快后续的join操作。
+> 注意，對於給定的一個頂點，如果RDD有超過一個的值，而只能使用其中一個。因此建議用下列的方法來將結果預設索引值，來保證RDD的唯一性，來大量加速後續的`join`運算。
 
 ```scala
 val nonUniqueCosts: RDD[(VertexID, Double)]
@@ -210,8 +198,7 @@ val joinedGraph = graph.joinVertices(uniqueCosts)(
   (id, oldCost, extraCost) => oldCost + extraCost)
 ```
 
-除了将用户自定义的map函数用到所有顶点和改变顶点属性类型以外，更一般的[outerJoinVertices](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@outerJoinVertices[U,VD2](RDD[(VertexId,U)])((VertexId,VD,Option[U])⇒VD2)(ClassTag[U],ClassTag[VD2]):Graph[VD2,ED])与`joinVertices`类似。
-因为并不是所有顶点在RDD中拥有匹配的值，map函数需要一个option类型。
+除了將使用者自定義的map函數套用到所有的頂點和改變頂點屬性類型外，更一般的[outerJoinVertices](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@outerJoinVertices[U,VD2](RDD[(VertexId,U)])((VertexId,VD,Option[U])⇒VD2)(ClassTag[U],ClassTag[VD2]):Graph[VD2,ED])的用法與`joinVertices`類似。因為並非所有頂點在RDD中都有匹配值，map函數需要一個option型別參數。
 
 ```scala
 val outDegrees: VertexRDD[Int] = graph.outDegrees
@@ -222,26 +209,22 @@ val degreeGraph = graph.outerJoinVertices(outDegrees) { (id, oldAttr, outDegOpt)
   }
 }
 ```
-
-你可能已经注意到了，在上面的例子中用到了curry函数的多参数列表。虽然我们可以将f(a)(b)写成f(a,b)，但是f(a,b)意味着b的类型推断将不会依赖于a。因此，用户需要为定义
-的函数提供类型标注。
+> 你可能已經注意到，上面的例子中用到了`curry`函數的多參數清單。我們能夠將f(a)(b)寫成f(a,b)，但f(a,b)表示b的型別將不會依賴於a。因此，使用者需要為自定義的函數提供型別的宣告。
 
 ```scala
 val joinedGraph = graph.joinVertices(uniqueCosts,
   (id: VertexID, oldCost: Double, extraCost: Double) => oldCost + extraCost)
 ```
 
-## 相邻聚合（Neighborhood Aggregation）
+# 相鄰聚合（Neighborhood Aggregation）
 
-图分析任务的一个关键步骤是汇总每个顶点附近的信息。例如我们可能想知道每个用户的追随者的数量或者每个用户的追随者的平均年龄。许多迭代图算法（如PageRank，最短路径和连通体）
-多次聚合相邻顶点的属性。
+圖形分析中最關鍵的步驟就是匯集每個頂點周圍的資訊。例如，我們可能想知道每個使用者的追隨者數量或是平均年齡。許多的迭代圖形演算法（如PageRank、最短路徑（Shortest Path）和連通分量（Connected Components））重複的匯集相鄰頂點（如PageRank的值、到來源的最短路徑、最小可到達的頂點id）的資訊。
 
-为了提高性能，主要的聚合操作从`graph.mapReduceTriplets`改为了新的`graph.AggregateMessages`。虽然API的改变相对较小，但是我们仍然提供了过渡的指南。
+> 為了改善效能，將主要的聚合運算子從`graph.mapReduceTriplets`改成新的`graph.AggregateMessages`。雖然API的變化不大，但是我們仍然提高轉換的指南。
 
-### 聚合消息(aggregateMessages)
+## 聚合消息(aggregateMessages)
 
-GraphX中的核心聚合操作是[aggregateMessages](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@aggregateMessages[A]((EdgeContext[VD,ED,A])⇒Unit,(A,A)⇒A,TripletFields)(ClassTag[A]):VertexRDD[A])。
-这个操作将用户定义的`sendMsg`函数应用到图的每个边三元组(edge triplet)，然后应用`mergeMsg`函数在其目的顶点聚合这些消息。
+GraphX中的核心聚合運算是[aggregateMessages](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@aggregateMessages[A]((EdgeContext[VD,ED,A])⇒Unit,(A,A)⇒A,TripletFields)(ClassTag[A]):VertexRDD[A])。這個運算子在圖形的每個edge triplet應用一個使用者自定義的`sendMsg`函數，然後也應用`mergeMsg`函數去匯集目表頂點的資訊。
 
 ```scala
 class Graph[VD, ED] {
@@ -253,7 +236,9 @@ class Graph[VD, ED] {
 }
 ```
 
-用户自定义的`sendMsg`函数是一个[EdgeContext](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.EdgeContext)类型。它暴露源和目的属性以及边缘属性
+使用者自定義的`sendMsg`函數
+
+用户自定义的函数是一个[EdgeContext](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.EdgeContext)类型。它暴露源和目的属性以及边缘属性
 以及发送消息给源和目的属性的函数([sendToSrc](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.EdgeContext@sendToSrc(msg:A):Unit)和[sendToDst](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.EdgeContext@sendToDst(msg:A):Unit))。
 可将`sendMsg`函数看做map-reduce过程中的map函数。用户自定义的`mergeMsg`函数指定两个消息到相同的顶点并保存为一个消息。可以将`mergeMsg`函数看做map-reduce过程中的reduce函数。
 [aggregateMessages](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@aggregateMessages[A]((EdgeContext[VD,ED,A])⇒Unit,(A,A)⇒A,TripletFields)(ClassTag[A]):VertexRDD[A])
