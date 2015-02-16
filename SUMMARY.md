@@ -51,6 +51,7 @@
 * [MLlib](mllib/README.md)
    * [數據類型(Data Type)](mllib/data_type.md)
        * [本地向量(Local vector)](mllib/local_vector.md)
+   * [標記點(Labeled point)](mllib/labeled_point.md)
 * [GraphX编程指南](graphx-programming-guide/README.md)
    * [開始](graphx-programming-guide/getting-started.md)
    * [屬性圖](graphx-programming-guide/property-graph.md)
