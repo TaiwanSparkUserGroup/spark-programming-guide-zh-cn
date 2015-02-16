@@ -222,9 +222,9 @@ val joinedGraph = graph.joinVertices(uniqueCosts,
 
 > 為了改善效能，將主要的聚合運算子從`graph.mapReduceTriplets`改成新的`graph.AggregateMessages`。雖然API的變化不大，但是我們仍然提高轉換的指南。
 
-## 聚合消息(aggregateMessages)
+## 聚合訊息(aggregateMessages)
 
-GraphX中的核心聚合運算是[aggregateMessages](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@aggregateMessages[A]((EdgeContext[VD,ED,A])⇒Unit,(A,A)⇒A,TripletFields)(ClassTag[A]):VertexRDD[A])。這個運算子在圖形的每個edge triplet應用一個使用者自定義的`sendMsg`函數，然後也應用`mergeMsg`函數去匯集目表頂點的資訊。
+GraphX中的核心聚合運算是[aggregateMessages](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@aggregateMessages[A]((EdgeContext[VD,ED,A])⇒Unit,(A,A)⇒A,TripletFields)(ClassTag[A]):VertexRDD[A])。這個運算子在圖形的每個edge triplet應用一個使用者自定義的`sendMsg`函數，然後也應用`mergeMsg`函數去匯集目標頂點的資訊。
 
 ```scala
 class Graph[VD, ED] {
@@ -236,20 +236,13 @@ class Graph[VD, ED] {
 }
 ```
 
-使用者自定義的`sendMsg`函數
+使用者自定義的`sendMsg`函數接受一個[EdgeContext](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.EdgeContext)型別，`EdgeContext`透露了起始和目標的屬性以及傳送訊息給起始和目標屬性的函數（[sendToSrc](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.EdgeContext@sendToSrc(msg:A):Unit)和[sendToDst](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.EdgeContext@sendToDst(msg:A):Unit)）。可以將`sendMsg`視作`map-reduce`中的`map`函數。而使用者自定義的`mergeMsg`函數接受兩個指定的訊息到相同的頂點並產生一個訊息，可以將`mergeMsg`視作`map-reduce`中的`reduce`函數。[aggregateMessages](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@aggregateMessages[A]((EdgeContext[VD,ED,A])⇒Unit,(A,A)⇒A,TripletFields)(ClassTag[A]):VertexRDD[A])運算子會回傳一個包含匯集訊息（Msg型別）到指定的每一個頂點的`VertexRDD[Msg]`。沒有接收到訊息的頂點不會包含在回傳的`VertexRDD`中。
 
-用户自定义的函数是一个[EdgeContext](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.EdgeContext)类型。它暴露源和目的属性以及边缘属性
-以及发送消息给源和目的属性的函数([sendToSrc](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.EdgeContext@sendToSrc(msg:A):Unit)和[sendToDst](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.EdgeContext@sendToDst(msg:A):Unit))。
-可将`sendMsg`函数看做map-reduce过程中的map函数。用户自定义的`mergeMsg`函数指定两个消息到相同的顶点并保存为一个消息。可以将`mergeMsg`函数看做map-reduce过程中的reduce函数。
-[aggregateMessages](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@aggregateMessages[A]((EdgeContext[VD,ED,A])⇒Unit,(A,A)⇒A,TripletFields)(ClassTag[A]):VertexRDD[A])
-操作返回一个包含聚合消息(目的地为每个顶点)的`VertexRDD[Msg]`。没有接收到消息的顶点不包含在返回的`VertexRDD`中。
+另外，[aggregateMessages](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@aggregateMessages[A]((EdgeContext[VD,ED,A])⇒Unit,(A,A)⇒A,TripletFields)(ClassTag[A]):VertexRDD[A])接受一個可選的參數`tripletFields`，它顯示出在`EdgeContext`中，哪些資料是可被存取的（如起始頂點的屬性，而目標頂點的屬性無法）。`tripletsFields`可能的值都定義在[TripletFields](http://spark.apache.org/docs/latest/api/java/org/apache/spark/graphx/TripletFields.html)中，預設值為`TripleetFields.All`，其說明使用者自定義的`sendMsg`可存取`EdgeContext`的任何欄位。`tripletFields`參數可用來通知GraphX只有部分的`EdgeContext`需要允許GraphX選擇一個優化的`Join`策略。舉例，如果我們想要計算每個使用者的追隨者平均年齡，我們只需要起始的欄位，所以我們只需要用`TripletFields.Src`來表示我們只需要起始的欄位。
 
-另外，[aggregateMessages](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@aggregateMessages[A]((EdgeContext[VD,ED,A])⇒Unit,(A,A)⇒A,TripletFields)(ClassTag[A]):VertexRDD[A])
-有一个可选的`tripletFields`参数，它指出在`EdgeContext`中，哪些数据被访问（如源顶点特征而不是目的顶点特征）。`tripletsFields`可能的选项定义在[TripletFields](http://spark.apache.org/docs/latest/api/java/org/apache/spark/graphx/TripletFields.html)中。
-`tripletFields`参数用来通知GraphX仅仅只需要`EdgeContext`的一部分允许GraphX选择一个优化的连接策略。例如，如果我们想计算每个用户的追随者的平均年龄，我们仅仅只需要源字段。
-所以我们用`TripletFields.Src`表示我们仅仅只需要源字段。
+> 在早期GraphX的版本，我們利用位元碼檢測，作為`TripletFields.Src`的值，然而我們發現這樣有點不太可靠，所以挑選了更明確的用法。
 
-在下面的例子中，我们用`aggregateMessages`操作计算每个用户更年长的追随者的年龄。
+在以下的範例中，我們用`aggregateMessages`運算子來計算每個使用者年長的追隨者的平均年齡。
 
 ```scala
 // Import random graph generation library
@@ -274,11 +267,11 @@ val avgAgeOfOlderFollowers: VertexRDD[Double] =
 // Display the results
 avgAgeOfOlderFollowers.collect.foreach(println(_))
 ```
-当消息（以及消息的总数）是常量大小(列表和连接替换为浮点数和添加)时，`aggregateMessages`操作的效果最好。
+> 當訊息（或是訊息的總數）是固定常數（如福點數和加法，而不是串列和串接）時，`aggregateMessages`的效果會最好。
 
-### Map Reduce三元组过渡指南
+## Map Reduce三元组过渡指南
 
-在之前版本的GraphX中，利用[mapReduceTriplets]操作完成相邻聚合。
+在早期GraphX的版本中，利用[mapReduceTriplets](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@mapReduceTriplets[A](mapFunc:org.apache.spark.graphx.EdgeTriplet[VD,ED]=>Iterator[(org.apache.spark.graphx.VertexId,A)],reduceFunc:(A,A)=>A,activeSetOpt:Option[(org.apache.spark.graphx.VertexRDD[_],org.apache.spark.graphx.EdgeDirection)])(implicitevidence$10:scala.reflect.ClassTag[A]):org.apache.spark.graphx.VertexRDD[A])運算子來完成相鄰聚合（Neighborhood Aggregation）。
 
 ```scala
 class Graph[VD, ED] {
@@ -288,11 +281,10 @@ class Graph[VD, ED] {
     : VertexRDD[Msg]
 }
 ```
-`mapReduceTriplets`操作在每个三元组上应用用户定义的map函数，然后保存用用户定义的reduce函数聚合的消息。然而，我们发现用户返回的迭代器是昂贵的，它抑制了我们添加额外优化(例如本地顶点的重新编号)的能力。
-[aggregateMessages](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@aggregateMessages[A]((EdgeContext[VD,ED,A])⇒Unit,(A,A)⇒A,TripletFields)(ClassTag[A]):VertexRDD[A])
-暴露三元组字段和函数显示的发送消息到源和目的顶点。并且，我们删除了字节码检测转而需要用户指明三元组的哪些字段实际需要。
 
-下面的代码用到了`mapReduceTriplets`
+[mapReduceTriplets](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@mapReduceTriplets[A](mapFunc:org.apache.spark.graphx.EdgeTriplet[VD,ED]=>Iterator[(org.apache.spark.graphx.VertexId,A)],reduceFunc:(A,A)=>A,activeSetOpt:Option[(org.apache.spark.graphx.VertexRDD[_],org.apache.spark.graphx.EdgeDirection)])(implicitevidence$10:scala.reflect.ClassTag[A]):org.apache.spark.graphx.VertexRDD[A])運算子接受每個三元組應用於使用者自定義的`map`函數，且能夠產生利用使用者自定義的`reduce`函數來匯集訊息。然而，我們發現使用者返回的迭代器是昂貴的，且它禁止我們添加額外的優化功能（如區域頂點的重新編號）。在[aggregateMessages](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph@aggregateMessages[A]((EdgeContext[VD,ED,A])⇒Unit,(A,A)⇒A,TripletFields)(ClassTag[A]):VertexRDD[A])中，我們介紹了`EdgeContext`，它透露三元組欄位和函數來更明確的傳送訊息給起始和目標的頂點。因此，我們移除了位元碼檢測，而要求使用者明確的指出三元組的哪些欄位是實際上使用的。
+
+以下是利用了`mapReduceTriplets`的範例：
 
 ```scala
 val graph: Graph[Int, Float] = ...
@@ -303,7 +295,7 @@ def reduceFun(a: Int, b: Int): Int = a + b
 val result = graph.mapReduceTriplets[String](msgFun, reduceFun)
 ```
 
-下面的代码用到了`aggregateMessages`
+也等效於以下使用`aggregateMessages`的範例：
 
 ```scala
 val graph: Graph[Int, Float] = ...
@@ -314,10 +306,9 @@ def reduceFun(a: Int, b: Int): Int = a + b
 val result = graph.aggregateMessages[String](msgFun, reduceFun)
 ```
 
-### 计算度信息
+## 計算分支度（degree）資訊
 
-最一般的聚合任务就是计算顶点的度，即每个顶点相邻边的数量。在有向图中，经常需要知道顶点的入度、出度以及总共的度。[GraphOps](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps)
-类包含一个操作集合用来计算每个顶点的度。例如，下面的例子计算最大的入度、出度和总度。
+最一般的聚合任務就是計算每一個頂點的分支度數，就是每個頂點相鄰邊的數量。在有向圖中，經常需要知道頂點的內分支度、外分支度及分支度的總數。[GraphOps](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps)類別中，有一系列的運算子來計算每個頂點的分支度。例如，以下的範例是計算最大的內分支度、外分支度和分支度的總數。
 
 ```scala
 // Define a reduce operation to compute the highest degree vertex
@@ -329,10 +320,9 @@ val maxInDegree: (VertexId, Int)  = graph.inDegrees.reduce(max)
 val maxOutDegree: (VertexId, Int) = graph.outDegrees.reduce(max)
 val maxDegrees: (VertexId, Int)   = graph.degrees.reduce(max)
 ```
-### Collecting Neighbors
+## Collecting Neighbors
 
-在某些情况下，通过收集每个顶点相邻的顶点及它们的属性来表达计算可能更容易。这可以通过[collectNeighborIds](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps@collectNeighborIds(EdgeDirection):VertexRDD[Array[VertexId]])
-和[collectNeighbors](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps@collectNeighbors(EdgeDirection):VertexRDD[Array[(VertexId,VD)]])操作来简单的完成
+在某些情形下，透過收集每個頂點相鄰的頂點及他們的屬性來代替計算會更容易。這可以透過[collectNeighborIds](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.GraphOps@collectNeighborIds(EdgeDirection):VertexRDD[Array[VertexId]])運算子完成。
 
 ```scala
 class GraphOps[VD, ED] {
@@ -340,13 +330,11 @@ class GraphOps[VD, ED] {
   def collectNeighbors(edgeDirection: EdgeDirection): VertexRDD[ Array[(VertexId, VD)] ]
 }
 ```
-这些操作是非常昂贵的，因为它们需要重复的信息和大量的通信。如果可能，尽量用`aggregateMessages`操作直接表达相同的计算。
 
-### 缓存和不缓存
+> 這些運算子是非常昂貴的，因為需要複製資訊及大量的通訊。如果可能，盡量使用`aggregateMessages`來直接替代相同的計算。
 
-在Spark中，RDDs默认是不缓存的。为了避免重复计算，当需要多次利用它们时，我们必须显示地缓存它们。GraphX中的图也有相同的方式。当利用到图多次时，确保首先访问`Graph.cache()`方法。
+## 暫存與否
 
-在迭代计算中，为了获得最佳的性能，不缓存可能是必须的。默认情况下，缓存的RDDs和图会一直保留在内存中直到因为内存压力迫使它们以LRU的顺序删除。对于迭代计算，先前的迭代的中间结果将填充到缓存
-中。虽然它们最终会被删除，但是保存在内存中的不需要的数据将会减慢垃圾回收。只有中间结果不需要，不缓存它们是更高效的。这涉及到在每次迭代中物化一个图或者RDD而不缓存所有其它的数据集。
-在将来的迭代中仅用物化的数据集。然而，因为图是由多个RDD组成的，正确的不持久化它们是困难的。对于迭代计算，我们建议使用Pregel API，它可以正确的不持久化中间结果。
+在Spark中，RDDs在預設下是不會一直存在記憶體中。為了避免重複運算，當要多次使用它們，則必須明確的將它們暫存起來。而Graphs在GraphX中的行為就像是RDDs一樣。當Graphs需要被多次使用，記得先呼叫`Graph.cache()`。
 
+在迭代運算中，為了得到最佳的效能，不暫存是必須的。在預設情況下，暫存的RDDs和Graphs會一直保留在記憶體中，直到記憶體將它們釋放（利用LRU演算法）。對於迭代運算中，先前計算的結果也會暫存在記憶體中。雖然最終都會被釋放，但是暫存不需要的資料在記憶體中會減慢垃圾回收（Garbage collection）速度。若中間產生出來的結果不暫存，則會提升整體的效率。這牽扯到每次迭代中實體化一個Graph或者RDD，且不暫存其他的資料集，在未來的迭代中僅僅使用實體化的資料集。**對於迭代的計算，我們推薦Pregel API，它能適時的將中間結果釋放。**
