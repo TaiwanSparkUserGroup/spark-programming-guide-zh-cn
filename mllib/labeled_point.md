@@ -18,3 +18,19 @@ val neg = LabeledPoint(0.0, Vectors.sparse(3, Array(0, 2), Array(1.0, 3.0)))
 
 * Sparse data
 
+擁有sparse訓練資料是很常見的做法。MLlib支持讀取為LIBSVM格式的訓練實例，它使用[LIBSVM](http://www.csie.ntu.edu.tw/~cjlin/libsvm/)與[LIBLINEAR](http://www.csie.ntu.edu.tw/~cjlin/liblinear/)做為預設格式。它是一種文本格式，每一行表示成一個標記稀疏特徵向量(labeled sparse feature vector)，使用以下的格式：
+```
+label index1:value1 index2:value2 ...
+```
+
+其中索引是以1為基索引（one-based)並升序。在讀取後，這些特徵索引會被轉換成以0為基索引。
+
+
+MLUtils.loadLibSVMFile 讀取LIBSVM格式的訓練實例
+```scala
+import org.apache.spark.mllib.regression.LabeledPoint
+import org.apache.spark.mllib.util.MLUtils
+import org.apache.spark.rdd.RDD
+
+val examples: RDD[LabeledPoint] = MLUtils.loadLibSVMFile(sc, "data/mllib/sample_libsvm_data.txt")
+```
