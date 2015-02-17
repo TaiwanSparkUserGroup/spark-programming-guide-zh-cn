@@ -57,7 +57,7 @@
 * [MLlib](mllib/README.md)
   * [數據類型](mllib/data_type.md)
     * [本地向量](mllib/local_vector.md)
- 
+
 * [GraphX編程指南](graphx-programming-guide/README.md)
   * [開始](graphx-programming-guide/getting-started.md)
   * [屬性圖](graphx-programming-guide/property-graph.md)
