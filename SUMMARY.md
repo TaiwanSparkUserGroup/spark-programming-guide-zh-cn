@@ -63,7 +63,7 @@
        * [分層抽樣(Stratified sampling)](mllib/stratified_sampling.md)
        * [假設檢定(Hypothesis testing)](mllib/hypothesis_testing.md)
        * [隨機數據生成(Random data generation)](mllib/random_data_generation.md)
-   * [Classification and Regression](mllib/classification_and_regression.md)
+   * [分類與迴歸(Classification and Regression)](mllib/classification_and_regression.md)
 * [GraphX编程指南](graphx-programming-guide/README.md)
    * [開始](graphx-programming-guide/getting-started.md)
    * [屬性圖](graphx-programming-guide/property-graph.md)
