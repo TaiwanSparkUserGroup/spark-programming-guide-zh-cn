@@ -1,0 +1,2 @@
+# 評估指標(Evaluation metrics)
+MLlib支持常用的二元分類評估指標方法（在PySpark中不可用）。包括精度，召回率，F度量( [F-measure](http://en.wikipedia.org/wiki/F1_score))，接收者特徵操作曲線([receiver operating characteristic, ROC](http://en.wikipedia.org/wiki/Receiver_operating_characteristic))，精度-召回率曲線以及曲面下面積([ area under the curves, AUC](http://en.wikipedia.org/wiki/Receiver_operating_characteristic#Area_under_the_curve))。AUC常用來比較不同模型的性能，精度/召回率/F度量用來決定閾值(threshold)時為預測指定恰當閾值。
