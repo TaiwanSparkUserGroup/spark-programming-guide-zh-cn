@@ -1,12 +1,13 @@
-## 并行集合
+## 平行集合
 
-并行集合 (_Parallelized collections_) 的创建是通过在一个已有的集合(Scala `Seq`)上调用 SparkContext 的 `parallelize` 方法实现的。集合中的元素被复制到一个可并行操作的分布式数据集中。例如，这里演示了如何在一个包含 1 到 5 的数组中创建并行集合：
+建立平行集合 (_Parallelized collections_) 的方法是利用一個已存在的序列(Scala `Seq`)上使用 SparkContext 的 `parallelize`。序列中的元素會被複製到一個併行操作的分布式資料集合裡。例如：如何建立一個包含數字1 到5 的併行集合：
 
 ```scala
 val data = Array(1, 2, 3, 4, 5)
 val distData = sc.parallelize(data)
 ```
 
-一旦创建完成，这个分布式数据集(`distData`)就可以被并行操作。例如，我们可以调用 `distData.reduce((a, b) => a + b)` 将这个数组中的元素相加。我们以后再描述在分布式上的一些操作。
+當平行集合建立完成，這樣的分布式資料集(`distData`) 就可以被操作。例如，可以使用 `distData.reduce((a, b) => a + b)` 將裡面的元素數字加總。後續會再對這部份進行操作上的介紹。
 
-并行集合一个很重要的参数是切片数(_slices_)，表示一个数据集切分的份数。Spark 会在集群上为每一个切片运行一个任务。你可以在集群上为每个 CPU 设置 2-4 个切片(slices)。正常情况下，Spark 会试着基于你的集群状况自动地设置切片的数目。然而，你也可以通过 `parallelize` 的第二个参数手动地设置(例如：`sc.parallelize(data, 10)`)。
+值得注意，在併行集合裡有一個重要的概念，就是切片數(_slices_)，即一個資料集被切的份數。Spark 會在集群上指派每一個切片執行任務。你也可以在集群上替每個 CPU 設定 2-4 個切片(slices)。一般情況下， Spark 會常識基於你的集群狀態自動設定切片的數量。當然，你也可以利用 `parallelize` 參數的第二個位置做設定，例如`sc.parallelize(data, 10)`。
+
