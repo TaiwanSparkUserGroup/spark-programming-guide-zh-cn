@@ -1,11 +1,10 @@
-# 提交应用程序
+# 提交應用程式
 
-在Spark bin目录下的`spark-submit`可以用来在集群上启动应用程序。它可以通过统一的接口使用Spark支持的所有[集群管理器](https://spark.apache.org/docs/latest/cluster-overview.html#cluster-manager-types)
-，所有你不必为每一个管理器做相应的配置。
+在Spark bin 目錄下的`spark-submit` 讓你在集群上啟動應用程式。它可以通過統一接口使用Spark 支援的所有[ 集群管理器](https://spark.apache.org/docs/latest/cluster-overview.html#cluster-manager-types)，所有你不必為每個管理器作相對應的設定。
 
-## 用spark-submit启动应用程序
+## 用spark-submit 啟動應用程式
 
-`bin/spark-submit`脚本负责建立包含Spark以及其依赖的类路径（classpath），它支持不同的集群管理器以及Spark支持的加载模式。
+`bin/spark-submit` 指令負責建立包含Spark 以及他所相依的類別路徑(classpath)，他支援不同的集群管理器以及Spark 支持的加載模式。
 
 ```shell
 ./bin/spark-submit \
@@ -18,23 +17,21 @@
   [application-arguments]
 ```
 
-一些常用的选项是：
+常用選項如下：
 
-- `--class`：你的应用程序的入口点(如org.apache.spark.examples.SparkPi)
+- `--class`：你的應用程式入口點(如org.apache.spark.examples.SparkPi)
 - `--master`：集群的master URL(如spark://23.195.26.187:7077)
-- `--deploy-mode`：在worker节点部署你的driver(cluster)或者本地作为外部客户端（client）。默认是client。
-- `--conf`：任意的Spark配置属性，格式是key=value。
-- `application-jar`：包含应用程序以及其依赖的jar包的路径。这个URL必须在集群中全局可见，例如，存在于所有节点的`hdfs://`路径或`file://`路径
-- `application-arguments`：传递给主类的主方法的参数
+- `--deploy-mode`：在worker 節點部署你的driver(cluster) 或者本地作為外部客戶端(client)。預設是client。
+- `--conf`：自定的Spark 配置屬性，格式是key=value。
+- `application-jar`：包含應用程式以及其相依的jar 包路徑。這個URL 必須在集群中全域可用，例如，存放在所有節點的`hdfs://` 路徑或是`file://` 路徑
+- `application-arguments`：傳遞給主類別的參數
 
-一个通用的部署策略是从网关集群提交你的应用程序，这个网关机器和你的worker集群物理上协作。在这种设置下，`client`模式是适合的。在`client`模式下，driver直接在`spark-submit`进程
-中启动，而这个进程直接作为集群的客户端。应用程序的输入和输出都和控制台相连接。因此，这种模式特别适合涉及REPL的应用程序。
+常見的部署策略是從網路提交你的應用程式。這種設定之下，適合`client` 模式。在`client` 模式，driver直接在`spark-submit` 中啟動。這樣的方式直接作為集群客戶端。由於應用程式的輸入與輸出都與控制台相連，所以也適合與 REPL 的應用程式。
 
-另一种选择，如果你的应用程序从一个和worker机器相距很远的机器上提交，通常情况下用`cluster`模式减少drivers和executors的网络迟延。注意，`cluster`模式目前不支持独立集群、
-mesos集群以及python应用程序。
+另一種選擇，如果你的應用程式從一個與worker 機器距離很遠的機器上提交，一般情況下，用`cluster` 模式可減少drivers和executors 的網路延遲。注意，`cluster` 模式目前不支援獨立集群、mesos集群以及python應用程式。
 
-有几个我们使用的集群管理器特有的可用选项。例如，在Spark独立集群的`cluster`模式下，你也可以指定`--supervise`用来确保driver自动重启（如果它因为非零退出码失败）。
-为了列举spark-submit所有的可用选项，用`--help`运行它。
+有幾個我們使用的集群管理特有的選項。例如，在Spark讀立即群的`cluster`模式下，你也可以指定`--supervise` 以確保driver 自動重新啟動(如果它因為發生錯誤而退出失敗)。
+為了列出spark-submit 所有可用參數，用`--help` 執行。
 
 ```shell
 # Run application locally on 8 cores
@@ -83,14 +80,14 @@ export HADOOP_CONF_DIR=XXX
 
 ## Master URLs
 
-传递给Spark的url可以用下面的模式
+傳送給Spark 的url 可用下列模式
 
 Master URL | Meaning
 --- | ---
-local | 用一个worker线程本地运行Spark
-local[K] | 用k个worker线程本地运行Spark(理想情况下，设置这个值为你的机器的核数)
-local[*] | 用尽可能多的worker线程本地运行Spark
-spark://HOST:PORT | 连接到给定的Spark独立部署集群master。端口必须是master配置的端口，默认是7077
-mesos://HOST:PORT | 连接到给定的mesos集群
-yarn-client | 以`client`模式连接到Yarn集群。群集位置将基于通过HADOOP_CONF_DIR变量找到
-yarn-cluster | 以`cluster`模式连接到Yarn集群。群集位置将基于通过HADOOP_CONF_DIR变量找到
+local | 用一個worker 本地執行Spark
+local[K] | 用k 個worker 本地執行Spark (理想情況下，數值為機器CPU 的數量)
+local[*] | 有多少worker 就用多少，以本地執行Spark
+spark://HOST:PORT | 連結到指定Spark 獨立集群master。端口必須是master 配置的端口，預設是7077
+mesos://HOST:PORT | 連結到指定的mesos 集群
+yarn-client | 以`client` 模式連結到Yarn 集群。集群位置設定在變數HADOOP_CONF_DIR
+yarn-cluster | 以`cluster`模式連結到Yarn 集群。集群位置設定在變數HADOOP_CONF_DIR
