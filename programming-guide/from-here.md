@@ -1,7 +1,7 @@
 <<<<<<< HEAD
 # 從這裡開始
 
-你可以從Spark 官網上尋找一些[Spark 執行範例](http://spark.apache.org/examples.html)。另外，Spark的example 目錄提供幾個Spark 例子，你可以利用下列方式執行Java 或是scala範例：
+你可以從Spark 官網尋找一些[Spark 執行範例](http://spark.apache.org/examples.html)。另外，Spark的example 目錄提供幾個Spark 例子，你可以利用下列方式執行Java 或是scala範例：
 ```shell
 ./bin/run-example SparkPi
 ```
