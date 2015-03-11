@@ -8,6 +8,7 @@ RowMatrix可以由RDD[Vector] 實例被創建。接著我們可以計算列的�
 import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.mllib.linalg.distributed.RowMatrix
 
+
 val rows: RDD[Vector] = ... // an RDD of local vectors
 // Create a RowMatrix from an RDD[Vector].
 val mat: RowMatrix = new RowMatrix(rows)
