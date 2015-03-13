@@ -1,9 +1,8 @@
-# 数据源
+# [資料來源](https://spark.apache.org/docs/latest/sql-programming-guide.html#data-sources)
 
-Spark SQL支持通过SchemaRDD接口操作各种数据源。一个SchemaRDD能够作为一个一般的RDD被操作，也可以被注册为一个临时的表。注册一个SchemaRDD为一个表就
-可以允许你在其数据上运行SQL查询。这节描述了加载数据为SchemaRDD的多种方法。
+Spark SQL 支持通過 SchemaRDD 接口操作各種資料來源。一個 SchemaRDD 能夠作為一個一般的 RDD 被操作，也可以被註冊為一個臨時的表。註冊一個 SchemaRDD 為一個表就可以允許你在其數據上運行 SQL 查詢。這節描述了加載數據為 SchemaRDD 的多種方法。
 
 * [RDDs](rdds.md)
 * [parquet文件](parquet-files.md)
-* [JSON数据集](jSON-datasets.md)
+* [JSON資料集](jSON-datasets.md)
 * [Hive表](hive-tables.md)
