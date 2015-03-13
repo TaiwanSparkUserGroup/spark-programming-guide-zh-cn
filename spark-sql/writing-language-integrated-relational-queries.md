@@ -1,6 +1,6 @@
 # [編寫語言整合(Language-Integrated)的關聯性查詢](https://spark.apache.org/docs/latest/sql-programming-guide.html#writing-language-integrated-relational-queries)
 
-**語言整合的關聯性查詢是實驗性的，現在暂时只支援scala。**
+**語言整合的關聯性查詢是實驗性的，現在暫時只支援scala。**
 
 Spark SQL也支持用特定領域的語法編寫查詢語句，請參考使用下列範例的資料：
 
