@@ -1,20 +1,19 @@
-# 其它SQL接口
+# [其它SQL接口](https://spark.apache.org/docs/latest/sql-programming-guide.html#other-sql-interfaces)
 
-Spark SQL也支持直接运行SQL查询的接口，不用写任何代码。
+Spark SQL 也支持直接運行 SQL 查詢的接口，不用寫任何代碼。
 
-## 运行Thrift JDBC/ODBC服务器
+## 運行 Thrift JDBC/ODBC 伺服器
 
-这里实现的Thrift JDBC/ODBC服务器与Hive 0.12中的[HiveServer2](https://cwiki.apache.org/confluence/display/Hive/Setting+Up+HiveServer2)相一致。你可以用在Spark
-或者Hive 0.12附带的beeline脚本测试JDBC服务器。
+這裡實現的 Thrift JDBC/ODBC 伺服器與 Hive 0.12中的[HiveServer2](https://cwiki.apache.org/confluence/display/Hive/Setting+Up+HiveServer2)一致。你可以用在 Spark 
+或者 Hive 0.12 附帶的 beeline 腳本測試 JDBC 伺服器。
 
-在Spark目录中，运行下面的命令启动JDBC/ODBC服务器。
+在 Spark 目錄中，運行下面的命令啟動 JDBC/ODBC 伺服器。
 
 ```shell
 ./sbin/start-thriftserver.sh
 ```
 
-这个脚本接受任何的`bin/spark-submit`命令行参数，加上一个`--hiveconf`参数用来指明Hive属性。你可以运行`./sbin/start-thriftserver.sh --help`来获得所有可用选项的完整
-列表。默认情况下，服务器监听`localhost:10000`。你可以用环境变量覆盖这些变量。
+這個腳本接受任何的 `bin/spark-submit` 命令行參數，加上一個 `--hiveconf` 參數用來指明 Hive 屬性。你可以運行 `./sbin/start-thriftserver.sh --help` 來獲得所有可用選項的完整列表。預設情况下，伺服器監聽 `localhost:10000` 。你可以用環境變數附蓋這些變數。
 
 ```shell
 export HIVE_SERVER2_THRIFT_PORT=<listening-port>
@@ -23,7 +22,7 @@ export HIVE_SERVER2_THRIFT_BIND_HOST=<listening-host>
   --master <master-uri> \
   ...
 ```
-或者通过系统变量覆盖。
+或者透過系統變數覆蓋。
 
 ```shell
 ./sbin/start-thriftserver.sh \
@@ -32,24 +31,25 @@ export HIVE_SERVER2_THRIFT_BIND_HOST=<listening-host>
   --master <master-uri>
   ...
 ```
-现在你可以用beeline测试Thrift JDBC/ODBC服务器。
+現在你可以用 `beeline` 測試 Thrift JDBC/ODBC 伺服器。
 
 ```shell
 ./bin/beeline
 ```
-连接到Thrift JDBC/ODBC服务器的方式如下：
+
+連接到 Thrift JDBC/ODBC 伺服器的方式如下：
 
 ```shell
 beeline> !connect jdbc:hive2://localhost:10000
 ```
 
-Beeline将会询问你用户名和密码。在非安全的模式，简单地输入你机器的用户名和空密码就行了。对于安全模式，你可以按照[Beeline文档](https://cwiki.apache.org/confluence/display/Hive/HiveServer2+Clients)的说明来执行。
+Beeline 將會詢問你的用戶名稱和密碼。在非安全的模式，簡單地輸入你機器的用戶名稱和空密碼就行了。對於安全模式，你可以按照[Beeline文檔](https://cwiki.apache.org/confluence/display/Hive/HiveServer2+Clients)的說明來執行。
 
-## 运行Spark SQL CLI
+## 運行 Spark SQL CLI
 
-Spark SQL CLI是一个便利的工具，它可以在本地运行Hive元存储服务、执行命令行输入的查询。注意，Spark SQL CLI不能与Thrift JDBC服务器通信。
+Spark SQL CLI 是一個便利的工具，它可以在本地運行 Hive 元儲存(metastore)服務、執行命令行輸入的查詢。注意，Spark SQL CLI不能與 Thrift JDBC 伺服器通信。
 
-在Spark目录运行下面的命令可以启动Spark SQL CLI。
+在 Spark 目錄運行下面的命令可以啟動 Spark SQL CLI。
 
 ```shell
 ./bin/spark-sql
