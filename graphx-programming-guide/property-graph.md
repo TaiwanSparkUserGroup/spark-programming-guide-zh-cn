@@ -1,6 +1,6 @@
 # [屬性圖](http://spark.apache.org/docs/1.2.0/graphx-programming-guide.html#the-property-graph)
 
-[屬性圖](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph)是一個有向多重圖，它帶有連接到每個節點和邊的用戶定義的對象。
+[屬性圖](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.graphx.Graph)是一個有向多重圖，它帶有連接到每個節點和邊的使用者定義的對象。
 有向多重圖中多個平行(parallel)的邊共享相同的來源和目的地節點。支持平行邊的能力簡化了建模場景，這個場景中，相同的節點存在多種關係(例如co-worker和friend)。每個節點由一个
 唯一的64位元的辨識碼（VertexID）作為key。GraphX並沒有對節點辨識碼限制任何的排序。同樣，節點擁有相應的來源和目的節點辨識碼。
 
@@ -18,7 +18,7 @@ var graph: Graph[VertexProperty, String] = null
 和RDD一樣，屬性圖是不可變的、分布式的、容错的。圖的值或者結構的改變需要按期望的生成一個新的圖来實現。注意，原始圖的實質的部分(例如:不受影響的結構，屬性和索引)都可以在新圖中重用，用來减少這種內在的功能數據結構的成本。
 執行者使用一系列節點分區試探法來對圖進行分區。如RDD一樣，圖中的每個分區可以在發生故障的情況下被重新創建在不同的機器上。
 
-邏輯上的屬性圖對應於一對類型化的集合(RDD),這個集合編碼了每一個節點和邊的屬性。因此，圖類別包含訪問圖中的節點和邊的成员。
+邏輯上的屬性圖對應於一對類型化的集合(RDD),這個集合編碼了每一個節點和邊的屬性。因此，圖類別包含訪問圖中的節點和邊的成員。
 
 ```scala
 class Graph[VD, ED] {
