@@ -13,7 +13,7 @@ Spark SQL 也支持直接運行 SQL 查詢的接口，不用寫任何代碼。
 ./sbin/start-thriftserver.sh
 ```
 
-這個腳本接受任何的 `bin/spark-submit` 命令行參數，加上一個 `--hiveconf` 參數用來指明 Hive 屬性。你可以運行 `./sbin/start-thriftserver.sh --help` 來獲得所有可用選項的完整列表。預設情况下，伺服器監聽 `localhost:10000` 。你可以用環境變數附蓋這些變數。
+這個腳本接受任何的 `bin/spark-submit` 命令行參數，加上一個 `--hiveconf` 參數用來指明 Hive 屬性。你可以運行 `./sbin/start-thriftserver.sh --help` 來獲得所有可用選項的完整列表。預設情况下，伺服器監聽 `localhost:10000` 。你可以用環境變數覆蓋這些變數。
 
 ```shell
 export HIVE_SERVER2_THRIFT_PORT=<listening-port>
