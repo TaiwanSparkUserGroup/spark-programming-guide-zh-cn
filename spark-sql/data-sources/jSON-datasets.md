@@ -1,6 +1,6 @@
 # [JSON資料集](https://spark.apache.org/docs/latest/sql-programming-guide.html#json-datasets)
 
-Spark SQL能夠自動推斷 JSON 資料集的模式，讀取為 SchemaRDD。這種轉換可以透過下面兩種方法来實現
+Spark SQL能夠自動推斷 JSON 資料集的模式，讀取為 SchemaRDD。這種轉換可以透過下面兩種方法來實現．
 
 - jsonFile ：從一個包含 JSON 文件的目錄中讀取。文件中的每一行是一個 JSON 物件
 - jsonRDD ：從存在的 RDD 讀取資料，這些 RDD 的每个元素是一個包含 JSON 物件的字串

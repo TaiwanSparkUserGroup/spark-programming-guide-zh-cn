@@ -30,8 +30,8 @@ teenagers.map(t => "Name: " + t(0)).collect().foreach(println)
 
 Property Name | Default | Meaning
 --- | --- | ---
-spark.sql.parquet.binaryAsString | false | 一些其它的Parquet-producing系统，特别是Impala和其它版本的Spark SQL，當寫出 Parquet 模式的时候，二進位資料和字串之間無法分區分。這個標記告诉Spark SQL 將二進位資料解釋為字串來提供這些系统的相容性。
-spark.sql.parquet.cacheMetadata | true | 打開 parquet 中介資料的暫存，可以提高靜態數據的查詢速度
-spark.sql.parquet.compression.codec | gzip | 設置寫 parquet 文件時的壓縮算法，可以接受的值包括：uncompressed, snappy, gzip, lzo
+spark.sql.parquet.binaryAsString | false | 一些其它的Parquet-producing系统，特别是Impala和其它版本的Spark SQL，當寫出 Parquet 模式的時候，二進位資料和字串之間無法分區分。這個標記告訴Spark SQL 將二進位資料解釋為字串來提供這些系统的相容性。
+spark.sql.parquet.cacheMetadata | true | 打開 parquet 中繼資料的暫存，可以提高靜態數據的查詢速度
+spark.sql.parquet.compression.codec | gzip | 設置寫 parquet 文件時的壓縮演算法，可以接受的值包括：uncompressed, snappy, gzip, lzo
 spark.sql.parquet.filterPushdown | false | 打開 Parquet 過濾器的 pushdown 優化。因為已知的 Paruet 錯誤，這個選項預設是關閉的。如果你的表不包含任何空的字串或者二進位的列，開啟這個選項仍是安全的
 spark.sql.hive.convertMetastoreParquet | true | 當設置為 false 時，Spark SQL 將使用 Hive SerDe 代替内建的支援
