@@ -1,5 +1,6 @@
 # Spark 編程指南繁體中文版
 =============================
+如果你是個讀者，這邊有更容易閱讀的[Gitbook版本](http://taiwansparkusergroup.gitbooks.io/spark-programming-guide-zh-tw/)
 
 ## 貢獻方式
 請有意願加入的同好參考(https://github.com/TaiwanSparkUserGroup/spark-programming-guide-zh-tw/blob/master/CONTRIBUTING.rst)
@@ -30,7 +31,7 @@
   * [基本概念](spark-streaming/basic-concepts/README.md)
     * [連接](spark-streaming/basic-concepts/linking.md)
     * [初始化StreamingContext](spark-streaming/basic-concepts/initializing-StreamingContext.md)
-    * [串流離散化](spark-streaming/basic-concepts/discretized-streams.md)
+    * [離散化串流](spark-streaming/basic-concepts/discretized-streams.md)
     * [输入DStreams](spark-streaming/basic-concepts/input-DStreams.md)
     * [DStream中的轉換](spark-streaming/basic-concepts/transformations-on-DStreams.md)
     * [DStream的輸出操作](spark-streaming/basic-concepts/output-operations-on-DStreams.md)

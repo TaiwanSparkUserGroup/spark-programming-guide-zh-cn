@@ -1,11 +1,11 @@
-# JSON数据集
+# [JSON資料集](https://spark.apache.org/docs/latest/sql-programming-guide.html#json-datasets)
 
-Spark SQL能够自动推断JSON数据集的模式，加载它为一个SchemaRDD。这种转换可以通过下面两种方法来实现
+Spark SQL能夠自動推斷 JSON 資料集的模式，讀取為 SchemaRDD。這種轉換可以透過下面兩種方法來實現．
 
-- jsonFile ：从一个包含JSON文件的目录中加载。文件中的每一行是一个JSON对象
-- jsonRDD ：从存在的RDD加载数据，这些RDD的每个元素是一个包含JSON对象的字符串
+- jsonFile ：從一個包含 JSON 文件的目錄中讀取。文件中的每一行是一個 JSON 物件
+- jsonRDD ：從存在的 RDD 讀取資料，這些 RDD 的每个元素是一個包含 JSON 物件的字串
 
-注意，作为jsonFile的文件不是一个典型的JSON文件，每行必须是独立的并且包含一个有效的JSON对象。结果是，一个多行的JSON文件经常会失败
+注意作為*jsonFile*的文件不是一個典型的 JSON 文件，每行必須是獨立的並且包含一個有效的JSON物件。一個多行的JSON物件經常會失敗．
 
 ```scala
 // sc is an existing SparkContext.
