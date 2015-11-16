@@ -1,7 +1,6 @@
-# 开始
+# [開始](https://spark.apache.org/docs/latest/sql-programming-guide.html#getting-started)
 
-Spark中所有相关功能的入口点是[SQLContext](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.SQLContext)类或者它的子类，
-创建一个SQLContext的所有需要仅仅是一个SparkContext。
+Spark中所有相關功能的入口點是[SQLContext](http://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.SQLContext)物件或者它的子物件，創建一個SQLContext僅僅需要一個SparkContext。
 
 ```scala
 val sc: SparkContext // An existing SparkContext.
@@ -10,10 +9,8 @@ val sqlContext = new org.apache.spark.sql.SQLContext(sc)
 // createSchemaRDD is used to implicitly convert an RDD to a SchemaRDD.
 import sqlContext.createSchemaRDD
 ```
-除了一个基本的SQLContext，你也能够创建一个HiveContext，它支持基本SQLContext所支持功能的一个超集。它的额外的功能包括用更完整的HiveQL分析器写查询去访问HiveUDFs的能力、
-从Hive表读取数据的能力。用HiveContext你不需要一个已经存在的Hive开启，SQLContext可用的数据源对HiveContext也可用。HiveContext分开打包是为了避免在Spark构建时包含了所有
-的Hive依赖。如果对你的应用程序来说，这些依赖不存在问题，Spark 1.2推荐使用HiveContext。以后的稳定版本将专注于为SQLContext提供与HiveContext等价的功能。
+除了一個基本的 SQLContext，你也能夠創建一個 HiveContext，它支持基本 SQLContext 所支持功能的一個超集( superset)。它額外的功能包括用更完整的 HiveQL 分析器寫查詢去訪問 HiveUDFs 的能力、
+從 Hive Table 讀取資料的能力。用 HiveContext 你不需要開啟一個已經存在的 Hive， SQLContext 可用的資料來源 HiveContext 也可使用。HiveContext 分開打包是為了避免在 Spark 構建時包含了所有的 Hive 依賴。如果對你的應用程式來說，這些依賴不存在問題， Spark 1.2推薦使用 HiveContext。以後的穩定版本將專注於為 SQLContext 提供與 HiveContext 等價的功能。
 
-用来解析查询语句的特定SQL变种语言可以通过`spark.sql.dialect`选项来选择。这个参数可以通过两种方式改变，一种方式是通过`setConf`方法设定，另一种方式是在SQL命令中通过`SET key=value`
-来设定。对于SQLContext，唯一可用的方言是“sql”，它是Spark SQL提供的一个简单的SQL解析器。在HiveContext中，虽然也支持"sql"，但默认的方言是“hiveql”。这是因为HiveQL解析器更
-完整。在很多用例中推荐使用“hiveql”。
+用來解析查詢語句的特定SQL變種語言可以通過 `spark.sql.dialect` 選項來選擇。這個參數可以通過兩種方式改變，一種方式是通過 `setConf` 方法設定，另一種方式是在SQL命令中通過 `SET key=value` 
+來設定。對於 SQLContext ，唯一可用的方言是 “sql” ，它是 Spark SQL 提供的一个個簡單的SQL解析器。在 HiveContext 中，雖然也支持 "sql" ，但預設的語言是 “hiveql”。這是因為 HiveQL解析器更更完整。在很多實例中推薦使用 “hiveql”。

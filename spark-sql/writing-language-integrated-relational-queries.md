@@ -1,8 +1,8 @@
-# 编写语言集成(Language-Integrated)的相关查询
+# [編寫語言整合(Language-Integrated)的關聯性查詢](https://spark.apache.org/docs/latest/sql-programming-guide.html#writing-language-integrated-relational-queries)
 
-语言集成的相关查询是实验性的，现在暂时只支持scala。
+**語言整合的關聯性查詢是實驗性的，現在暫時只支援scala。**
 
-Spark SQL也支持用领域特定语言编写查询。
+Spark SQL也支持用特定領域的語法編寫查詢語句，請參考使用下列範例的資料：
 
 ```scala
 // sc is an existing SparkContext.
@@ -11,11 +11,10 @@ val sqlContext = new org.apache.spark.sql.SQLContext(sc)
 import sqlContext._
 val people: RDD[Person] = ... // An RDD of case class objects, from the first example.
 
-// The following is the same as 'SELECT name FROM people WHERE age >= 10 AND age <= 19'
+// 下述等同於 'SELECT name FROM people WHERE age >= 10 AND age <= 19'
 val teenagers = people.where('age >= 10).where('age <= 19).select('name)
 teenagers.map(t => "Name: " + t(0)).collect().foreach(println)
 ```
 
-DSL使用Scala的符号来表示在潜在表(underlying table)中的列，这些列以前缀(')标示。将这些符号隐式转换成由SQL执行引擎计算的表达式。你可以在[ScalaDoc](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.SchemaRDD)
-中了解详情。
-
+DSL使用Scala的符號來表示在潜在表(underlying table)中的列，這些列以前缀(')標示。將這些符號透過隱式轉成由SQL執行引擎計算的表達式。你可以在[ScalaDoc](https://spark.apache.org/docs/latest/api/scala/index.html#org.apache.spark.sql.SchemaRDD)
+中了解詳情。

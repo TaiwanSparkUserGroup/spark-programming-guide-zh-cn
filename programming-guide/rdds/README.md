@@ -5,16 +5,8 @@ Spark 核心概念是 _Resilient Distributed Dataset (RDD)_ ，你可以將它�
 * [併行集合](parallelized-collections.md)
 * [外部資料集](external-datasets.md)
 * [RDD 操作](rdd-operations.md)
-<<<<<<< HEAD
-* [傳送函數到 Spark](passing-functions-to-spark.md)
-* [使用鍵值對](working-with-key-value-pairs.md)
-* [Transformations](transformations.md)
-* [Actions](actions.md)
-* [RDD 持久化](rdd-persistences.md)
-=======
   * [傳送函數到 Spark](passing-functions-to-spark.md)
   * [使用鍵值對](working-with-key-value-pairs.md)
   * [Transformations](transformations.md)
   * [Actions](actions.md)
 * [RDD 持久化](rdd_persistence.md)
->>>>>>> master
