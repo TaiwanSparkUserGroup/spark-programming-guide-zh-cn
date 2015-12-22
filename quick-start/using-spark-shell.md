@@ -87,4 +87,4 @@ scala> linesWithSpark.count()
 res9: Long = 15
 ```
 
-暫存 100 行的文本文件來研究 Spark 這看起来很傻。真正讓人感興趣的部分是我们可以在非常大型的數據集中使用同樣的函數，甚至在 10 個或者 100 個節點中交叉計算。你同樣可以使用 `bin/spark-shell` 連接到一个 cluster 來繼亂掉[编程指南](https://spark.apache.org/docs/latest/programming-guide.html#initializing-spark)中的方法進行交互操作。
+暫存 100 行的文本文件來研究 Spark 這看起来很傻。真正讓人感興趣的部分是我们可以在非常大型的數據集中使用同樣的函數，甚至在 10 個或者 100 個節點中交叉計算。你同樣可以使用 `bin/spark-shell` 連接到一个 cluster 來替換掉[编程指南](https://spark.apache.org/docs/latest/programming-guide.html#initializing-spark)中的方法進行交互操作。
