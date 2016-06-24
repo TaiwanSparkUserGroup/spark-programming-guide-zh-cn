@@ -19,7 +19,7 @@ distFile: RDD[String] = MappedRDD@1d4cee08
 
 除了文本文件，Spark 的 Scala API 支持其他幾種資料格式：
 
-- `SparkContext.sholeTextFiles` 可以讀取一個包含多個檔案的文件目錄，並且返回每一個(filename, content)。和 `textFile` 的差異是：它記錄的是每一個檔案中的每一行。
+- `SparkContext.wholeTextFiles` 可以讀取一個包含多個檔案的文件目錄，並且返回每一個(filename, content)。和 `textFile` 的差異是：它記錄的是每一個檔案中的每一行。
 - 關於 [SequenceFiles](http://hadoop.apache.org/docs/current/api/org/apache/hadoop/mapred/SequenceFileInputFormat.html)，你可以使用 SparkContext 的 `sequenceFile[K, V]` 方法產生，K 和 V 分別就是 key 和 values 。像 [IntWritable](http://hadoop.apache.org/docs/current/api/org/apache/hadoop/io/IntWritable.html) 與 [Text](http://hadoop.apache.org/docs/current/api/org/apache/hadoop/io/Text.html)，他們必須是Hadoop 的[Writable](http://hadoop.apache.org/docs/current/api/org/apache/hadoop/io/Writable.html) 的子類。另外對於幾種通用的 Writables，Spark 允許你指定原本類型來替代。例如： `sequenceFile[Int, String]` 會自動讀取 IntWritables 和 Text。
 
 - 至於其他的 Hadoop InputFormats，可以使用 `SparkContext.hadoopRDD` 方法，它可以指定任意的 `JobConf`，輸入格式(InputFormat)，key 類型，values 類型。你可以跟設定 Hadoop job 一樣的方法設定輸入來源。你還可以在新的的 MapReduce 接口(org.apache.hadoop.mapreduce) 基礎上使用 `SparkContext.newAPIHadoopRDD` (譯者提醒：原生的接口是 `SparkContext.newHadoopRDD`)。
