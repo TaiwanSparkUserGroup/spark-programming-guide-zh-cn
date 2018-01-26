@@ -80,8 +80,11 @@
 
 本文翻譯自
 
-1. [Spark 官方手冊](https://spark.apache.org/docs/latest/)
-2. [Spark 编程指南简体中文版](https://github.com/aiyanbo/spark-programming-guide-zh-cn)
+[Spark 官方手冊](https://spark.apache.org/docs/latest/)
+
+* Reference:
+
+[Spark 编程指南简体中文版](https://github.com/aiyanbo/spark-programming-guide-zh-cn)
 
 ## License
 
