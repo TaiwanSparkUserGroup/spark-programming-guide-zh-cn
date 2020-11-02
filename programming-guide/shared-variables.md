@@ -21,7 +21,7 @@ to give every node a copy of a large input dataset in an efficient manner.) Spar
 
 ## 累加器
 
-顧名思義，累加器是一種只能利用關連操作做“加” 操作的變數，因此他能夠快速的執行併行操作。而且他們能夠操作`counters`和`sums`。Spark 原本支援數值類型的累加器，開發人員可以自行增加可被支援的類型。
+顧名思義，累加器是一種只能利用關連操作做“加” 操作的變數，因此他能夠快速的執行平行操作。而且他們能夠操作`counters`和`sums`。Spark 原本支援數值類型的累加器，開發人員可以自行增加可被支援的類型。
 
 如果建立一個具名的累加器，它可在 Spark UI 上顯示。這對理解運作階段 ( running stages ) 的過程很有幫助。( 注意：python 中已支援 [AccumulatorPython](http://spark.apache.org/docs/1.0.2/api/python/))
 

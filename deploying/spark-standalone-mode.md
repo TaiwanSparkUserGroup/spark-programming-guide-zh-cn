@@ -39,7 +39,7 @@ Argument | Meaning
 ## 集群啟動脚本
 
 為了用啟動脚本啟動Spark獨立集群，你應該在你的Spark目錄下建立一个名為`conf/slaves`的文件，這个文件必須包含所有你要啟動的Spark worker所在機器的主機名，一行一個。如果
-`conf/slaves`不存在，啟動脚本默認为單個機器（localhost），這台機器對於測試是有用的。注意，master機器通過ssh訪問所有的worker。在默認情况下，SSH是並行運行，需要設置無密碼（採用私有密鑰）的訪問。
+`conf/slaves`不存在，啟動脚本默認为單個機器（localhost），這台機器對於測試是有用的。注意，master機器通過ssh訪問所有的worker。在默認情况下，SSH是平行運行，需要設置無密碼（採用私有密鑰）的訪問。
 如果你沒有設置为無密碼訪問，你可以設置環境變量`SPARK_SSH_FOREGROUND`，為每個worker提供密碼。
 
 一旦你設置了這个文件，你就可以通過下面的shell脚本啟動或者停止你的集群。
@@ -122,7 +122,7 @@ spark.worker.cleanup.appDataTtl | 7 * 24 * 3600 (7天) | 每個worker中應用�
 
 ## 資源調度
 
-獨立佈署的集群模式仅仅支持简单的FIFO調度器。然而，为了允许多個並行的用户，你能夠控制每個應用程序能用的最大資源數。在默認情况下，它將獲得集群的所有核，這只有在某一時刻只
+獨立佈署的集群模式仅仅支持简单的FIFO調度器。然而，为了允许多個平行的用户，你能夠控制每個應用程序能用的最大資源數。在默認情况下，它將獲得集群的所有核，這只有在某一時刻只
 允許一个應用程序才有意義。你可以通過`spark.cores.max`在[SparkConf](http://spark.apache.org/docs/latest/configuration.html#spark-properties)中設置核數。
 
 ```scala

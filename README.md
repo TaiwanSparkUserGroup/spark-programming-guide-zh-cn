@@ -16,7 +16,7 @@
   * [引入 Spark](programming-guide/linking-with-spark.md)
   * [初始化 Spark](programming-guide/initializing-spark.md)
   * [Spark RDDs](programming-guide/rdds/README.md)
-    * [並行集合](programming-guide/rdds/parallelized-collections.md)
+    * [平行集合](programming-guide/rdds/parallelized-collections.md)
     * [外部數據集](programming-guide/rdds/external-datasets.md)
     * [RDD 操作](programming-guide/rdds/rdd-operations.md)
       * [傳遞函數到 Spark](programming-guide/rdds/passing-functions-to-spark.md)
